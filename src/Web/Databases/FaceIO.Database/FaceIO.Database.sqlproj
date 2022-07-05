@@ -63,12 +63,16 @@
     <Folder Include="dbo\Tables\Group" />
     <Folder Include="dbo\Tables\PersonInGroup" />
     <Folder Include="dbo\Tables\Object" />
+    <Folder Include="dbo\Tables\PersonImage" />
+    <Folder Include="dbo\Tables\GroupObject" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Person\Person.sql" />
     <Build Include="dbo\Tables\Group\Group.sql" />
     <Build Include="dbo\Tables\PersonInGroup\PersonInGroup.sql" />
     <Build Include="dbo\Tables\Object\Object.sql" />
+    <Build Include="dbo\Tables\PersonImage\PersonImage.sql" />
+    <Build Include="dbo\Tables\GroupObject\GroupObject.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FaceIO.Database.publish.xml" />
