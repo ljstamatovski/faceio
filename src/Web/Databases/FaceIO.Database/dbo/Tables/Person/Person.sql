@@ -4,8 +4,10 @@
 	[Uid]								UNIQUEIDENTIFIER				NOT NULL,
 	[CreatedOn]							SMALLDATETIME					NOT NULL,
 	[DeletedOn]							SMALLDATETIME					NULL,
+	[CustomerFk]						INT								NOT NULL,
 	[Name]								NVARCHAR (150)					NOT NULL,
-	CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED ([Id] ASC)
+	CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED ([Id] ASC),
+	CONSTRAINT [FK_Person_Customer] FOREIGN KEY ([CustomerFk]) REFERENCES [dbo].[Customer] ([Id])
 )
 
 GO

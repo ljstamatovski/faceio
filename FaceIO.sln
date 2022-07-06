@@ -11,13 +11,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Databases", "Databases", "{
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FaceIO.Database", "src\Web\Databases\FaceIO.Database\FaceIO.Database.sqlproj", "{484A552F-DBB7-401C-BC54-46838890A395}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceIO.Contracts", "src\Web\FaceIO.Contracts\FaceIO.Contracts.csproj", "{3F71B4FB-3D52-4DFF-937C-14B5E3664BB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FaceIO.Contracts", "src\Web\FaceIO.Contracts\FaceIO.Contracts.csproj", "{3F71B4FB-3D52-4DFF-937C-14B5E3664BB5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceIO.Domain", "src\Web\FaceIO.Domain\FaceIO.Domain.csproj", "{8BE59D06-6A05-412E-A158-E86E35263C7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FaceIO.Domain", "src\Web\FaceIO.Domain\FaceIO.Domain.csproj", "{8BE59D06-6A05-412E-A158-E86E35263C7C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceIO.Queries", "src\Web\FaceIO.Queries\FaceIO.Queries.csproj", "{BCC535FC-D219-441D-8B66-D18D63EC2395}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FaceIO.Queries", "src\Web\FaceIO.Queries\FaceIO.Queries.csproj", "{BCC535FC-D219-441D-8B66-D18D63EC2395}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FaceIO.Commands", "src\Web\FaceIO.Commands\FaceIO.Commands.csproj", "{DB725E2D-46B3-480C-B014-42EB783C6C9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FaceIO.Commands", "src\Web\FaceIO.Commands\FaceIO.Commands.csproj", "{DB725E2D-46B3-480C-B014-42EB783C6C9B}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{55E570B7-AEB0-49CB-AC2F-D1A9F6ABC554}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{DB725E2D-46B3-480C-B014-42EB783C6C9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DB725E2D-46B3-480C-B014-42EB783C6C9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DB725E2D-46B3-480C-B014-42EB783C6C9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55E570B7-AEB0-49CB-AC2F-D1A9F6ABC554}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55E570B7-AEB0-49CB-AC2F-D1A9F6ABC554}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55E570B7-AEB0-49CB-AC2F-D1A9F6ABC554}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55E570B7-AEB0-49CB-AC2F-D1A9F6ABC554}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
