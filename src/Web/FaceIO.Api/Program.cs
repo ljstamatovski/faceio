@@ -1,5 +1,8 @@
+using FaceIO.Commands.Common;
 using FaceIO.Contracts.Common.Database.Context;
 using FaceIO.Domain.Common.Database.Context;
+using FaceIO.Queries.Common;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -12,6 +15,8 @@ builder.Services.AddControllers()
 
 builder.Services.AddScoped<IFaceIODbContext, FaceIODbContext>();
 builder.Services.AddDbContext<FaceIODbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("FaceIODb")));
+
+builder.Services.AddMediatR(new[] { typeof(QueriesAssemblyMarker).Assembly, typeof(CommandsAssemblyMarker).Assembly });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

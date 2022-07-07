@@ -1,30 +1,29 @@
 namespace FaceIO.Api.Controllers
 {
-    using FaceIO.Contracts.Common.Database.Context;
-    using FaceIO.Domain.Customer.Entities;
-    using FaceIO.Domain.Location.Entities;
+    using FaceIO.Commands.Customer;
+    using FaceIO.Queries.Features.Location;
+    using MediatR;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
 
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private readonly IFaceIODbContext _dbContext;
+        private readonly IMediator _mediator;
 
-        public WeatherForecastController(IFaceIODbContext dbContext)
+        public WeatherForecastController(IMediator mediator)
         {
-            _dbContext = dbContext;
+            _mediator = mediator;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
         public async Task<IActionResult> GetAsync()
         {
-            var customer = await _dbContext.Set<Customer>().Include(x => x.Locations).SingleOrDefaultAsync();
+            var results = await _mediator.Send(new GetAllLocationsQuery());
 
-            var locations = await _dbContext.Set<Location>().ToListAsync();
+            var customer = await _mediator.Send(new AddCustomerCommand("FaceIO Second customer"));
 
-            return Ok(locations);
+            return Ok(results);
         }
     }
 }

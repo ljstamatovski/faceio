@@ -10,8 +10,8 @@
             Locations = new List<Location>();
         }
 
-        public string Name { get; protected internal set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        public ICollection<Location> Locations { get; protected internal set; }
+        public ICollection<Location> Locations { get; set; }
     }
 }

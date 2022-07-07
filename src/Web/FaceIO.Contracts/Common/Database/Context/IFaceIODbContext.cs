@@ -9,6 +9,8 @@
 
         EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
 
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+
         ChangeTracker ChangeTracker { get; }
     }
 }
