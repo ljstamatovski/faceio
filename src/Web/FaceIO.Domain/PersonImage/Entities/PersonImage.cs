@@ -6,9 +6,9 @@
 
     public class PersonImage : Entity
     {
-        public int PersonFk { get; protected internal set; }
+        public int PersonFk { get; set; }
 
         [ForeignKey(nameof(PersonFk))]
-        public Person Person { get; protected internal set; } = null!;
+        public Person Person { get; set; } = null!;
     }
 }

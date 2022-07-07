@@ -1,7 +1,6 @@
 namespace FaceIO.Api.Controllers
 {
     using FaceIO.Commands.Customer;
-    using FaceIO.Queries.Features.Location;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
 
@@ -19,11 +18,9 @@ namespace FaceIO.Api.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public async Task<IActionResult> GetAsync()
         {
-            var results = await _mediator.Send(new GetAllLocationsQuery());
-
             var customer = await _mediator.Send(new AddCustomerCommand("FaceIO Second customer"));
 
-            return Ok(results);
+            return Ok(customer);
         }
     }
 }

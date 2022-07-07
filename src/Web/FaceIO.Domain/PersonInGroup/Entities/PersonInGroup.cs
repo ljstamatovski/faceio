@@ -7,14 +7,14 @@
 
     internal class PersonInGroup : Entity
     {
-        public int GroupFk { get; protected internal set; }
+        public int GroupFk { get; set; }
 
         [ForeignKey(nameof(GroupFk))]
-        public Group Group { get; protected internal set; } = null!;
+        public Group Group { get; set; } = null!;
 
-        public int PersonFk { get; protected internal set; }
+        public int PersonFk { get; set; }
 
         [ForeignKey(nameof(PersonFk))]
-        public Person Person { get; protected internal set; } = null!;
+        public Person Person { get; set; } = null!;
     }
 }

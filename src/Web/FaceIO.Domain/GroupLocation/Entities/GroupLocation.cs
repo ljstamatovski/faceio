@@ -7,14 +7,14 @@
 
     public class GroupLocation : Entity
     {
-        public int GroupFk { get; protected internal set; }
+        public int GroupFk { get; set; }
 
         [ForeignKey(nameof(GroupFk))]
-        public Group Group { get; protected internal set; } = null!;
+        public Group Group { get; set; } = null!;
 
-        public int LocationFk { get; protected internal set; }
+        public int LocationFk { get; set; }
 
         [ForeignKey(nameof(LocationFk))]
-        public Location Location { get; protected internal set; } = null!;
+        public Location Location { get; set; } = null!;
     }
 }

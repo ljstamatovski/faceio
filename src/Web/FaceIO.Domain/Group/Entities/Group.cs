@@ -6,13 +6,13 @@
 
     public class Group : Entity
     {
-        public string Name { get; protected internal set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
 
-        public string Description { get; protected internal set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
 
-        public int CustomerFk { get; protected internal set; }
+        public int CustomerFk { get; set; }
 
         [ForeignKey(nameof(CustomerFk))]
-        public Customer Customer { get; protected internal set; } = null!;
+        public Customer Customer { get; set; } = null!;
     }
 }
