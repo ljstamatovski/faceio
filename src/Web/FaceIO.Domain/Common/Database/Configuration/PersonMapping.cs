@@ -1,14 +1,14 @@
 ﻿namespace FaceIO.Domain.Common.Database.Configuration
 {
-    using Location.Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
+    using Person.Entities;
 
-    public class LocationMapping : IEntityTypeConfiguration<Location>
+    public class PersonMapping : IEntityTypeConfiguration<Person>
     {
-        public void Configure(EntityTypeBuilder<Location> builder)
+        public void Configure(EntityTypeBuilder<Person> builder)
         {
-            builder.ToTable("Location", "dbo");
+            builder.ToTable("Person", "dbo");
 
             builder.HasKey(x => x.Id);
 

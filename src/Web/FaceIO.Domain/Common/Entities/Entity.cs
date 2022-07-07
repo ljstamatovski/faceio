@@ -1,6 +1,8 @@
-﻿namespace FaceIO.Domain.Common.Location.Entities
+﻿namespace FaceIO.Domain.Common.Entities
 {
-    public class Location
+    using System;
+
+    public class Entity
     {
         public int Id { get; protected internal set; }
 
@@ -9,7 +11,5 @@
         public DateTime CreatedOn { get; protected internal set; }
 
         public DateTime? DeletedOn { get; protected internal set; }
-
-        public string Name { get; protected internal set; } = null!;
     }
 }
