@@ -2,9 +2,9 @@
 {
     using Common.Database.Repositories;
     using Contracts.Common.Database.Context;
+    using Contracts.Common.Exceptions;
     using Customer.Entities;
     using Entities;
-    using FaceIO.Contracts.Common.Exceptions;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Threading.Tasks;
