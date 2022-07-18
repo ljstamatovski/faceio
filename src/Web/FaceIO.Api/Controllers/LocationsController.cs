@@ -27,6 +27,11 @@
         public async Task<IActionResult> CreateLocationAsync([FromRoute] Guid customerUid, [FromBody] CreateLocationRequest request)
             => Ok(await _mediator.Send(new AddLocationCommand(customerUid: customerUid, name: request.Name, description: request.Description)));
 
+        [HttpGet]
+        [Route("{locationUid:guid}")]
+        public async Task<IActionResult> GetLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid)
+            => Ok(await _mediator.Send(new GetLocationQuery(customerUid: customerUid, locationUid: locationUid)));
+
         [HttpPatch]
         [Route("{locationUid:guid}")]
         public async Task<IActionResult> UpdateLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid, [FromBody] UpdateLocationRequest request)
@@ -35,6 +40,6 @@
         [HttpDelete]
         [Route("{locationUid:guid}")]
         public async Task<IActionResult> DeleteLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid)
-            => Ok(await _mediator.Send(new RemoveLocationCommand(customerUid, locationUid)));
+            => Ok(await _mediator.Send(new RemoveLocationCommand(customerUid: customerUid, locationUid: locationUid)));
     }
 }
