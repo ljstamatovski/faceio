@@ -4,6 +4,7 @@
     using Contracts.Common.Database.Context;
     using Customer.Entities;
     using Entities;
+    using FaceIO.Contracts.Common.Exceptions;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Threading.Tasks;
@@ -24,7 +25,7 @@
 
             if (location is null)
             {
-                throw new Exception("Location not found.");
+                throw new FaceIONotFoundException($"Location with uid {locationUid} not found.");
             }
 
             return location;

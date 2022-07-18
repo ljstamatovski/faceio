@@ -2,6 +2,7 @@
 {
     using Common.Database.Repositories;
     using Contracts.Common.Database.Context;
+    using Contracts.Common.Exceptions;
     using Customer.Entities;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -20,7 +21,7 @@
 
             if (customer is null)
             {
-                throw new Exception("Customer not found.");
+                throw new FaceIONotFoundException($"Customer with uid {customerUid} not found.");
             }
 
             return customer;
