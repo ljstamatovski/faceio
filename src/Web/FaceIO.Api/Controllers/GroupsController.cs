@@ -32,6 +32,11 @@
         public async Task<IActionResult> GetGroupAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid)
             => Ok(await _mediator.Send(new GetGroupQuery(customerUid: customerUid, groupUid: groupUid)));
 
+        [HttpPatch]
+        [Route("{groupUid:guid}")]
+        public async Task<IActionResult> UpdateGroupAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid, [FromBody] UpdateGroupRequest request)
+            => Ok(await _mediator.Send(new UpdateGroupCommand(customerUid: customerUid, groupUid: groupUid, name: request.Name, description: request.Description)));
+
         [HttpDelete]
         [Route("{groupUid:guid}")]
         public async Task<IActionResult> DeleteGroupAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid)
