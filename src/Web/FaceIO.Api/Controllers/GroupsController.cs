@@ -22,6 +22,11 @@
         public async Task<IActionResult> GetGroupsAsync([FromRoute] Guid customerUid)
             => Ok(await _mediator.Send(new GetGroupsQuery(customerUid: customerUid)));
 
+        [HttpGet]
+        [Route("{groupUid:guid}")]
+        public async Task<IActionResult> GetGroupAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid)
+            => Ok(await _mediator.Send(new GetGroupQuery(customerUid: customerUid, groupUid: groupUid)));
+
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> CreateGroupAsync([FromRoute] Guid customerUid, [FromBody] CreateGroupRequest request)
