@@ -3,12 +3,14 @@
     using Common.Entities;
     using Group.Entities;
     using Location.Entities;
+    using Person.Entities;
 
     public class Customer : Entity
     {
         public Customer()
         {
             Groups = new List<Group>();
+            Persons = new List<Person>();
             Locations = new List<Location>();
         }
 
@@ -17,6 +19,8 @@
         public ICollection<Location> Locations { get; protected internal set; }
 
         public ICollection<Group> Groups { get; protected internal set; }
+
+        public ICollection<Person> Persons { get; protected internal set; }
 
         public static class Factory
         {
