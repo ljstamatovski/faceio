@@ -2,6 +2,7 @@
 {
     using FaceIO.Commands.Group;
     using FaceIO.Contracts.Group;
+    using FaceIO.Queries.Features.Group;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,11 @@
         {
             _mediator = mediator;
         }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetGroupsAsync([FromRoute] Guid customerUid)
+            => Ok(await _mediator.Send(new GetGroupsQuery(customerUid: customerUid)));
 
         [HttpPost]
         [Route("")]

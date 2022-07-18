@@ -38,7 +38,8 @@
                               Id = dbLocation.Id,
                               Uid = dbLocation.Uid,
                               CreatedOn = dbLocation.CreatedOn,
-                              Name = dbLocation.Name
+                              Name = dbLocation.Name,
+                              Description = dbLocation.Description
                           }).ToArrayAsync(cancellationToken);
         }
     }
