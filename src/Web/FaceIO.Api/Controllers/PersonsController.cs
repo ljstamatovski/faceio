@@ -1,0 +1,24 @@
+﻿namespace FaceIO.Api.Controllers
+{
+    using FaceIO.Commands.Person;
+    using FaceIO.Contracts.Person;
+    using MediatR;
+    using Microsoft.AspNetCore.Mvc;
+
+    [ApiController]
+    [Route("api/customers/{customerUid:guid}/persons")]
+    public class PersonsController : ControllerBase
+    {
+        private readonly IMediator _mediator;
+
+        public PersonsController(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
+
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> CreatePersonAsync([FromRoute] Guid customerUid, [FromBody] CreatePersonRequest request)
+            => Ok(await _mediator.Send(new AddPersonCommand(customerUid: customerUid, name: request.Name)));
+    }
+}

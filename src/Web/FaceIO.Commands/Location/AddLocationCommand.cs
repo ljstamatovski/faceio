@@ -40,8 +40,8 @@
             Customer customer = await _customersRepository.GetCustomerAsync(request.CustomerUid);
 
             Location location = Location.Factory.Create(name: request.Name,
-                                                        request.Description,
-                                                        customer.Id);
+                                                        description: request.Description,
+                                                        customerId: customer.Id);
 
             customer.Locations.Add(location);
 

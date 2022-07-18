@@ -41,8 +41,8 @@
             Customer customer = await _customersRepository.GetCustomerAsync(request.CustomerUid);
 
             Group group = Group.Factory.Create(name: request.Name,
-                                               request.Description,
-                                               customer.Id);
+                                               description: request.Description,
+                                               customerId: customer.Id);
 
             customer.Groups.Add(group);
 
