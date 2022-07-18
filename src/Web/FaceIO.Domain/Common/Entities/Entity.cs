@@ -4,12 +4,12 @@
 
     public class Entity
     {
-        public int Id { get; set; }
+        public int Id { get; protected internal set; }
 
-        public Guid Uid { get; set; }
+        public Guid Uid { get; protected internal set; }
 
-        public DateTime CreatedOn { get; set; }
+        public DateTime CreatedOn { get; protected internal set; }
 
-        public DateTime? DeletedOn { get; set; }
+        public DateTime? DeletedOn { get; protected internal set; }
     }
 }

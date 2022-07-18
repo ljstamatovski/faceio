@@ -1,8 +1,6 @@
 ﻿namespace FaceIO.Contracts.Location
 {
-    using Common;
-
-    public class LocationDto : RestBase
+    public class UpdateLocationRequest
     {
         public string Name { get; set; } = string.Empty;
 
