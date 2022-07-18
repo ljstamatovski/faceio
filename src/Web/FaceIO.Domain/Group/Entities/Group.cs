@@ -16,6 +16,30 @@
         [ForeignKey(nameof(CustomerFk))]
         public Customer Customer { get; protected internal set; } = null!;
 
+        public Group SetName(string name)
+        {
+            if (DeletedOn.HasValue)
+            {
+                throw new ValidationException("Can not set name, group is deleted.");
+            }
+
+            Name = name;
+
+            return this;
+        }
+
+        public Group SetDescription(string? description)
+        {
+            if (DeletedOn.HasValue)
+            {
+                throw new ValidationException("Can not set description, group is deleted.");
+            }
+
+            Description = description;
+
+            return this;
+        }
+
         public void MarkAsDeleted()
         {
             if (DeletedOn.HasValue)

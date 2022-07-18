@@ -16,9 +16,9 @@
         public async Task<Group> GetGroupAsync(Guid customerUid, Guid groupUid)
         {
             Group? group = await (from dbGroup in All<Group>().Where(x => x.Uid == groupUid)
-                                        join dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
-                                        on dbGroup.CustomerFk equals dbCustomer.Id
-                                        select dbGroup).SingleOrDefaultAsync();
+                                  join dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
+                                  on dbGroup.CustomerFk equals dbCustomer.Id
+                                  select dbGroup).SingleOrDefaultAsync();
 
             if (group is null)
             {
