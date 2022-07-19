@@ -4,6 +4,7 @@ using FaceIO.Domain.Common.Database.Context;
 using FaceIO.Domain.Customer.Repositories;
 using FaceIO.Domain.Group.Repositories;
 using FaceIO.Domain.Location.Repositories;
+using FaceIO.Domain.Person.Repositories;
 using FaceIO.Queries.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ builder.Services.AddDbContext<FaceIODbContext>(options => options.UseSqlServer(b
 builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
 builder.Services.AddScoped<ILocationsRepository, LocationsRepository>();
 builder.Services.AddScoped<IGroupsRepository, GroupsRepository>();
+builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
 
 builder.Services.AddMediatR(new[] { typeof(QueriesAssemblyMarker).Assembly, typeof(CommandsAssemblyMarker).Assembly });
 

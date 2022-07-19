@@ -2,6 +2,7 @@
 {
     using Common.Entities;
     using Customer.Entities;
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class Person : Entity
@@ -12,6 +13,16 @@
 
         [ForeignKey(nameof(CustomerFk))]
         public Customer Customer { get; protected internal set; } = null!;
+
+        public void MarkAsDeleted()
+        {
+            if (DeletedOn.HasValue)
+            {
+                throw new ValidationException("Can not delete person, person is already deleted.");
+            }
+
+            DeletedOn = DateTime.UtcNow;
+        }
 
         public static class Factory
         {
