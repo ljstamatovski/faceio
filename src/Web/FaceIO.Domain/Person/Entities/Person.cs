@@ -14,6 +14,18 @@
         [ForeignKey(nameof(CustomerFk))]
         public Customer Customer { get; protected internal set; } = null!;
 
+        public Person SetName(string name)
+        {
+            if (DeletedOn.HasValue)
+            {
+                throw new ValidationException("Can not set name, person is deleted.");
+            }
+
+            Name = name;
+
+            return this;
+        }
+
         public void MarkAsDeleted()
         {
             if (DeletedOn.HasValue)
