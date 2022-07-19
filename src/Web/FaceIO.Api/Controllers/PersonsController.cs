@@ -32,6 +32,12 @@
         public async Task<IActionResult> GetPersonAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid)
             => Ok(await _mediator.Send(new GetPersonQuery(customerUid: customerUid, personUid: personUid)));
 
+        [HttpPatch]
+        [Route("{personUid:guid}")]
+        public async Task<IActionResult> UpdatePersonAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid, [FromBody] UpdatePersonRequest request)
+            => Ok(await _mediator.Send(new UpdatePersonCommand(customerUid: customerUid, personUid: personUid, name: request.Name)));
+
+
         [HttpDelete]
         [Route("{personUid:guid}")]
         public async Task<IActionResult> DeletePersonAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid)
