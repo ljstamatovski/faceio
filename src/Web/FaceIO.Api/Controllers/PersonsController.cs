@@ -29,7 +29,7 @@
 
         [HttpGet]
         [Route("{personUid:guid}")]
-        public async Task<IActionResult> GetPersonsAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid)
+        public async Task<IActionResult> GetPersonAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid)
             => Ok(await _mediator.Send(new GetPersonQuery(customerUid: customerUid, personUid: personUid)));
 
         [HttpDelete]
