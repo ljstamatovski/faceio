@@ -2,6 +2,7 @@
 {
     using FaceIO.Commands.Person;
     using FaceIO.Contracts.Person;
+    using FaceIO.Queries.Features.Person;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,11 @@
         {
             _mediator = mediator;
         }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetPersonsAsync([FromRoute] Guid customerUid)
+            => Ok(await _mediator.Send(new GetPersonsQuery(customerUid: customerUid)));
 
         [HttpPost]
         [Route("")]
