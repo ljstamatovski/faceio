@@ -31,7 +31,7 @@
         private FilterInfo _currentDevice;
         private IVideoSource _videoSource;
 
-        private static readonly CascadeClassifier _cascadeClasifier = new CascadeClassifier(@"C:\Users\ljubi\Documents\Projects\FaceIO\src\Clients\FaceIO.Camera\Classifiers\haarcascade_frontalface_alt_tree.xml");
+        private static readonly CascadeClassifier _cascadeClasifier = new CascadeClassifier(@"Classifiers\haarcascade_frontalface_alt_tree.xml");
 
         public MainWindow()
         {
