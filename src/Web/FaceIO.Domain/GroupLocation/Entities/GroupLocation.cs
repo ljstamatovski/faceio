@@ -7,14 +7,29 @@
 
     public class GroupLocation : Entity
     {
-        public int GroupFk { get; set; }
+        public int GroupFk { get; protected internal set; }
 
         [ForeignKey(nameof(GroupFk))]
-        public Group Group { get; set; } = null!;
+        public Group Group { get; protected internal set; } = null!;
 
-        public int LocationFk { get; set; }
+        public int LocationFk { get; protected internal set; }
 
         [ForeignKey(nameof(LocationFk))]
-        public Location Location { get; set; } = null!;
+        public Location Location { get; protected internal set; } = null!;
+
+        public static class Factory
+        {
+            public static GroupLocation Create(int groupFk, int locationFk)
+            {
+                return new GroupLocation
+                {
+                    Uid = Guid.NewGuid(),
+                    CreatedOn = DateTime.UtcNow,
+                    GroupFk = groupFk,
+                    LocationFk = locationFk
+                };
+            }
+        }
+
     }
 }
