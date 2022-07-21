@@ -2,6 +2,8 @@
 {
     using AForge.Video;
     using AForge.Video.DirectShow;
+    using Emgu.CV;
+    using Emgu.CV.Structure;
     using System;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
@@ -27,8 +29,9 @@
         }
 
         private FilterInfo _currentDevice;
-
         private IVideoSource _videoSource;
+
+        private static readonly CascadeClassifier _cascadeClasifier = new CascadeClassifier(@"Classifiers\haarcascade_frontalface_alt_tree.xml");
 
         public MainWindow()
         {
@@ -62,6 +65,16 @@
                 BitmapImage bitmapImage;
                 using (var bitmap = (Bitmap)eventArgs.Frame.Clone())
                 {
+                    var grayImage = new Image<Bgr, byte>(bitmap);
+                    foreach (Rectangle rectangle in _cascadeClasifier.DetectMultiScale(grayImage, 1.2, 1))
+                    {
+                        using (var graphics = Graphics.FromImage(bitmap))
+                        using (var pen = new Pen(Color.Red, 3))
+                        {
+                            graphics.DrawRectangle(pen, rectangle);
+                        }
+                    }
+
                     bitmapImage = bitmap.ToBitmapImage();
                 }
 
