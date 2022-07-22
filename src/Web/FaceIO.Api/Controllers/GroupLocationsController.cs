@@ -1,6 +1,7 @@
 ﻿namespace FaceIO.Api.Controllers
 {
     using FaceIO.Commands.GroupLocation;
+    using FaceIO.Queries.Features.GroupLocation;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
 
@@ -14,6 +15,11 @@
         {
             _mediator = mediator;
         }
+
+        [HttpGet]
+        [Route("")]
+        public async Task<IActionResult> GetGroupLocationsAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid, [FromRoute] Guid locationUid)
+            => Ok(await _mediator.Send(new GetGroupLocationsQuery(customerUid, groupUid, locationUid)));
 
         [HttpPost]
         [Route("")]
