@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
 
     [ApiController]
-    [Route("api/customers/{customerUid:guid}/groups/{groupUid:guid}/locations/{locationUid:guid}/grouplocation")]
+    [Route("api/customers/{customerUid:guid}/groups/{groupUid:guid}/locations/{locationUid:guid}/grouplocations")]
     public class GroupLocationsController : ControllerBase
     {
         private readonly IMediator _mediator;
