@@ -45,14 +45,14 @@
         public async Task<IEnumerable<GroupLocationDto>> Handle(GetGroupLocationsQuery query, CancellationToken cancellationToken)
         {
             return await (from dbCustomer in _dbContext.Set<Customer>().Where(x => x.DeletedOn == null
-                          && x.Uid == query.CustomerUid)
+                                                                                && x.Uid == query.CustomerUid)
                           join dbLocation in _dbContext.Set<Location>().Where(x => x.DeletedOn == null
-                          && x.Uid == query.LocationUid)
+                                                                                && x.Uid == query.LocationUid)
                           on dbCustomer.Id equals dbLocation.CustomerFk
                           join dbGroupLocation in _dbContext.Set<GroupLocation>().Where(x => x.DeletedOn == null)
                           on dbLocation.Id equals dbGroupLocation.LocationFk
                           join dbGroup in _dbContext.Set<Group>().Where(x => x.DeletedOn == null
-                          && x.Uid == query.GroupUid)
+                                                                          && x.Uid == query.GroupUid)
                           on dbGroupLocation.GroupFk equals dbGroup.Id
                           select new GroupLocationDto
                           {
