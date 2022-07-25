@@ -1,5 +1,9 @@
+using Amazon;
+using Amazon.S3;
+using FaceIO.Api.Settings;
 using FaceIO.Commands.Common;
 using FaceIO.Contracts.Common.Database.Context;
+using FaceIO.Contracts.Common.Settings;
 using FaceIO.Domain.Common.Database.Context;
 using FaceIO.Domain.Customer.Repositories;
 using FaceIO.Domain.Group.Repositories;
@@ -20,6 +24,15 @@ builder.Services.AddControllers()
 
 builder.Services.AddScoped<IFaceIODbContext, FaceIODbContext>();
 builder.Services.AddDbContext<FaceIODbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("FaceIODb")));
+
+builder.Services.AddScoped<IAwsSettings>(_ => builder.Configuration.GetSection("AwsSettings").Get<AwsSettings>());
+
+builder.Services.AddScoped<IAmazonS3>(serviceProvider =>
+{
+    var awsSetings = serviceProvider.GetRequiredService<IAwsSettings>();
+
+    return new AmazonS3Client(awsSetings.AccessKey, awsSetings.AccessSecretKey, RegionEndpoint.EUCentral1);
+});
 
 builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
 builder.Services.AddScoped<ILocationsRepository, LocationsRepository>();

@@ -10,5 +10,21 @@
 
         [ForeignKey(nameof(PersonFk))]
         public Person Person { get; set; } = null!;
+
+        public string FileName { get; set; } = string.Empty;
+
+        public static class Factory
+        {
+            public static PersonImage Create(string fileName, int personId)
+            {
+                return new PersonImage
+                {
+                    Uid = Guid.NewGuid(),
+                    CreatedOn = DateTime.UtcNow,
+                    FileName = fileName,
+                    PersonFk = personId
+                };
+            }
+        }
     }
 }
