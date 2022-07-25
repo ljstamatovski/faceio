@@ -7,5 +7,7 @@
         string AccessKey { get; set; }
 
         string AccessSecretKey { get; set; }
+
+        int ExpirationInMinutes { get; set; }
     }
 }

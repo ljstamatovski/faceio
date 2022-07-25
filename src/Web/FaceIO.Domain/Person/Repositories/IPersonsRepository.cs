@@ -5,7 +5,7 @@
     public interface IPersonsRepository
     {
         /// <summary>
-        /// Returns group for provided customer and person uid.
+        /// Returns person for provided customer and person uid.
         /// </summary>
         /// <param name="customerUid"> Uid of the customer. </param>
         /// <param name="personUid"> Uid of the person. </param>

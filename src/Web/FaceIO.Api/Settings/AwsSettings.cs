@@ -4,17 +4,12 @@
 
     public class AwsSettings : IAwsSettings
     {
-        public string BucketName { get; set; }
+        public string BucketName { get; set; } = string.Empty;
 
-        public string AccessKey { get; set; }
+        public string AccessKey { get; set; } = string.Empty;
 
-        public string AccessSecretKey { get; set; }
+        public string AccessSecretKey { get; set; } = string.Empty;
 
-        public AwsSettings(string bucketName, string accessKey, string accessSecretKey)
-        {
-            BucketName = bucketName;
-            AccessKey = accessKey;
-            AccessSecretKey = accessSecretKey;
-        }
+        public int ExpirationInMinutes { get; set; }
     }
 }

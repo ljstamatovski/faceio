@@ -2,16 +2,27 @@
 {
     using Common.Entities;
     using Person.Entities;
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class PersonImage : Entity
     {
-        public int PersonFk { get; set; }
+        public int PersonFk { get; protected internal set; }
 
         [ForeignKey(nameof(PersonFk))]
-        public Person Person { get; set; } = null!;
+        public Person Person { get; protected internal set; } = null!;
 
-        public string FileName { get; set; } = string.Empty;
+        public string FileName { get; protected internal set; } = string.Empty;
+
+        public void MarkAsDeleted()
+        {
+            if (DeletedOn.HasValue)
+            {
+                throw new ValidationException("Can not delete person image, person image is already deleted.");
+            }
+
+            DeletedOn = DateTime.UtcNow;
+        }
 
         public static class Factory
         {
