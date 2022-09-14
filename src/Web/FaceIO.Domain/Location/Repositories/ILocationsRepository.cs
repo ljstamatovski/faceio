@@ -10,5 +10,7 @@
         /// <param name="customerUid"> Uid of the customer. </param>
         /// <param name="locationUid"> Uid of the location. </param>
         Task<Location> GetLocationAsync(Guid customerUid, Guid locationUid);
+
+        Task<object> GetGroupsWithLocationAccessAsync(Guid customerUid, Guid locationUid);
     }
 }

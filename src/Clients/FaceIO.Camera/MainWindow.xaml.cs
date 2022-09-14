@@ -8,16 +8,20 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading;
     using System.Windows;
     using System.Windows.Media.Imaging;
 
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        private Guid _customerUid = new Guid("");
+        private Guid _locationUid = new Guid("");
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public ObservableCollection<FilterInfo> VideoDevices { get; set; }
@@ -30,6 +34,9 @@
 
         private FilterInfo _currentDevice;
         private IVideoSource _videoSource;
+        private readonly BackgroundWorker _backgroundWorker;
+
+        private bool _isProcessingImage = true;
 
         private static readonly CascadeClassifier _cascadeClasifier = new CascadeClassifier(@"Classifiers\haarcascade_frontalface_alt_tree.xml");
 
@@ -40,6 +47,11 @@
             GetVideoDevices();
             Closing += MainWindow_Closing;
             StartCamera();
+
+            _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.DoWork += CompareImage;
+
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
         }
 
         protected void OnPropertyChanged(string propertyName)
@@ -66,13 +78,21 @@
                 using (var bitmap = (Bitmap)eventArgs.Frame.Clone())
                 {
                     var grayImage = new Image<Bgr, byte>(bitmap);
-                    foreach (Rectangle rectangle in _cascadeClasifier.DetectMultiScale(grayImage, 1.2, 1))
+                    var detectedFaces = _cascadeClasifier.DetectMultiScale(grayImage, 1.2, 1);
+
+                    foreach (Rectangle rectangle in detectedFaces)
                     {
                         using (var graphics = Graphics.FromImage(bitmap))
                         using (var pen = new Pen(Color.Red, 3))
                         {
                             graphics.DrawRectangle(pen, rectangle);
                         }
+                    }
+
+                    if (detectedFaces.Length > 0
+                     && !_isProcessingImage)
+                    {
+                        _backgroundWorker.RunWorkerAsync(bitmap.Clone(new Rectangle(0, 0, bitmap.Width, bitmap.Height), bitmap.PixelFormat));
                     }
 
                     bitmapImage = bitmap.ToBitmapImage();
@@ -123,6 +143,62 @@
             {
                 _videoSource.SignalToStop();
                 _videoSource.NewFrame -= ProcessNewFrame;
+            }
+        }
+
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            foreach (ImageCodecInfo codec in ImageCodecInfo.GetImageDecoders())
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+
+            return null;
+        }
+
+        private async void CompareImage(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                _isProcessingImage = true;
+
+                var bitmap = e.Argument as Bitmap;
+
+                using (var stream = new MemoryStream())
+                using (var httpClient = new HttpClient())
+                using (var multipartContent = new MultipartFormDataContent())
+                {
+                    Encoder encoder = Encoder.Quality;
+                    ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+
+                    var encoderParameters = new EncoderParameters(1);
+                    encoderParameters.Param[0] = new EncoderParameter(encoder, 50L);
+
+                    bitmap.Save(stream, jpgEncoder, encoderParameters);
+
+                    using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"https://localhost:49153/api/customers/{_customerUid}/locations/{_locationUid}/verify"))
+                    {
+                        request.Headers.TryAddWithoutValidation("accept", "*/*");
+
+                        var imageFile = new ByteArrayContent(stream.ToArray());
+                        imageFile.Headers.Add("Content-Type", "image/jpeg");
+                        multipartContent.Add(imageFile, "image", $"verify{DateTime.UtcNow.Minute}-{DateTime.UtcNow.Millisecond}.jpg");
+                        request.Content = multipartContent;
+
+                        var response = await httpClient.SendAsync(request);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                _isProcessingImage = false;
             }
         }
     }

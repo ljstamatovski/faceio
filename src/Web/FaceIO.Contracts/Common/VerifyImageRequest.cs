@@ -1,6 +1,6 @@
 ﻿namespace FaceIO.Contracts.Common
 {
-    public class UploadImageRequest : ImageRequest
+    public class VerifyImageRequest : ImageRequest
     {
     }
 }

@@ -33,11 +33,11 @@
             _personsRepository = personsRepository;
         }
 
-        public async Task<Unit> Handle(UpdatePersonCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdatePersonCommand command, CancellationToken cancellationToken)
         {
-            Person person = await _personsRepository.GetPersonAsync(request.CustomerUid, request.PersonUid);
+            Person person = await _personsRepository.GetPersonAsync(command.CustomerUid, command.PersonUid);
 
-            person.SetName(request.Name);
+            person.SetName(command.Name);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -5,6 +5,8 @@
     using Contracts.Common.Exceptions;
     using Customer.Entities;
     using Entities;
+    using Group.Entities;
+    using GroupLocation.Entities;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Threading.Tasks;
@@ -29,6 +31,31 @@
             }
 
             return location;
+        }
+
+        public async Task<object> GetGroupsWithLocationAccessAsync(Guid customerUid, Guid locationUid)
+        {
+            var p = await (from dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
+                           join dbLocation in All<Location>().Where(x => x.Uid == locationUid)
+                           on dbCustomer.Id equals dbLocation.CustomerFk
+                           join dbGroupLocation in All<GroupLocation>()
+                           on dbLocation.Id equals dbGroupLocation.LocationFk
+                           join dbGroup in All<Group>().Include(x => x.PersonsInGroup)
+                                                       .ThenInclude(x => x.Person)
+                                                       .ThenInclude(x => x.PersonImage)
+                           on dbGroupLocation.GroupFk equals dbGroup.Id
+                           select new
+                           {
+                               dbGroup.Name,
+                               dbGroup.Description,
+                               Persons = dbGroup.PersonsInGroup.Select(dbPersonInGroup => new
+                               {
+                                   dbPersonInGroup.Person.Name,
+                                   dbPersonInGroup.Person.PersonImage.FileName
+                               }).ToList()
+                           }).ToListAsync();
+
+            return p;
         }
     }
 }

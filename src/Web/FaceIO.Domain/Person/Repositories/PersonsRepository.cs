@@ -15,10 +15,8 @@
 
         public async Task<Person> GetPersonAsync(Guid customerUid, Guid personUid)
         {
-            Person? person = await (from dbPerson in All<Person>().Where(x => x.DeletedOn == null
-                                                                           && x.Uid == personUid)
-                                    join dbCustomer in All<Customer>().Where(x => x.DeletedOn == null
-                                                                               && x.Uid == customerUid)
+            Person? person = await (from dbPerson in All<Person>().Where(x => x.Uid == personUid)
+                                    join dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
                                     on dbPerson.CustomerFk equals dbCustomer.Id
                                     select dbPerson).SingleOrDefaultAsync();
 

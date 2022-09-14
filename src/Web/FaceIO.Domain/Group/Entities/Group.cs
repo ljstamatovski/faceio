@@ -2,19 +2,22 @@
 {
     using Common.Entities;
     using Customer.Entities;
+    using PersonInGroup.Entities;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class Group : Entity
+    public sealed class Group : Entity
     {
-        public string Name { get; protected internal set; } = string.Empty;
+        public string Name { get; internal set; } = string.Empty;
 
-        public string? Description { get; protected internal set; }
+        public string? Description { get; internal set; }
 
-        public int CustomerFk { get; protected internal set; }
+        public int CustomerFk { get; internal set; }
 
         [ForeignKey(nameof(CustomerFk))]
-        public Customer Customer { get; protected internal set; } = null!;
+        public Customer Customer { get; set; } = null!;
+
+        public ICollection<PersonInGroup> PersonsInGroup { get; set; } = new List<PersonInGroup>();
 
         public Group SetName(string name)
         {
