@@ -28,7 +28,7 @@
             => Ok(await _mediator.Send(new GetGroupQuery(customerUid: customerUid, groupUid: groupUid)));
 
         [HttpGet]
-        [Route("{groupUid:guid}")]
+        [Route("{groupUid:guid}/persons")]
         public async Task<IActionResult> GetPersonsInGroupAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid)
             => Ok(await _mediator.Send(new GetPersonsInGroupQuery(customerUid: customerUid, groupUid: groupUid)));
 
