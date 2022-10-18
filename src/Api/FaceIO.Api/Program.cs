@@ -11,6 +11,7 @@ using FaceIO.Domain.GroupLocation.Repositories;
 using FaceIO.Domain.Location.Repositories;
 using FaceIO.Domain.Person.Repositories;
 using FaceIO.Domain.PersonImage.Repositories;
+using FaceIO.Domain.PersonInGroup.Repositories;
 using FaceIO.Queries.Common;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,7 @@ builder.Services.AddScoped<IGroupsRepository, GroupsRepository>();
 builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
 builder.Services.AddScoped<IGroupLocationsRepository, GroupLocationsRepository>();
 builder.Services.AddScoped<IPersonImagesRepository, PersonImagesRepository>();
+builder.Services.AddScoped<IPersonsInGroupsRepository, PersonsInGroupsRepository>();
 
 builder.Services.AddMediatR(new[] { typeof(QueriesAssemblyMarker).Assembly, typeof(CommandsAssemblyMarker).Assembly });
 
