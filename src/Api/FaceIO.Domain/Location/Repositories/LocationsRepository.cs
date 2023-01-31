@@ -42,7 +42,7 @@
                            on dbLocation.Id equals dbGroupLocation.LocationFk
                            join dbGroup in All<Group>().Include(x => x.PersonsInGroup)
                                                        .ThenInclude(x => x.Person)
-                                                       .ThenInclude(x => x.PersonImage)
+                                                       .ThenInclude(x => x.Face)
                            on dbGroupLocation.GroupFk equals dbGroup.Id
                            select new
                            {
@@ -51,7 +51,7 @@
                                Persons = dbGroup.PersonsInGroup.Select(dbPersonInGroup => new
                                {
                                    dbPersonInGroup.Person.Name,
-                                   dbPersonInGroup.Person.PersonImage.FileName
+                                   dbPersonInGroup.Person.Face.FileName
                                }).ToList()
                            }).ToListAsync();
 

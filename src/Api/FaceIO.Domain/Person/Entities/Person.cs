@@ -2,7 +2,7 @@
 {
     using Common.Entities;
     using Customer.Entities;
-    using PersonImage.Entities;
+    using Face.Entities;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,10 +15,10 @@
         [ForeignKey(nameof(CustomerFk))]
         public Customer Customer { get; } = null!;
 
-        public int PersonImageFk { get; set; }
+        public int FaceFk { get; set; }
 
-        [ForeignKey(nameof(PersonImageFk))]
-        public PersonImage PersonImage { get; set; } = null!;
+        [ForeignKey(nameof(FaceFk))]
+        public Face Face { get; set; } = null!;
 
         public Person SetName(string name)
         {

@@ -63,7 +63,7 @@
     <Folder Include="dbo\Tables\Group" />
     <Folder Include="dbo\Tables\PersonInGroup" />
     <Folder Include="dbo\Tables\Location" />
-    <Folder Include="dbo\Tables\PersonImage" />
+    <Folder Include="dbo\Tables\Face" />
     <Folder Include="dbo\Tables\GroupLocation" />
     <Folder Include="dbo\Tables\Customer" />
   </ItemGroup>
@@ -72,7 +72,7 @@
     <Build Include="dbo\Tables\Group\Group.sql" />
     <Build Include="dbo\Tables\PersonInGroup\PersonInGroup.sql" />
     <Build Include="dbo\Tables\Location\Location.sql" />
-    <Build Include="dbo\Tables\PersonImage\PersonImage.sql" />
+    <Build Include="dbo\Tables\Face\Face.sql" />
     <Build Include="dbo\Tables\GroupLocation\GroupLocation.sql" />
     <Build Include="dbo\Tables\Customer\Customer.sql" />
   </ItemGroup>

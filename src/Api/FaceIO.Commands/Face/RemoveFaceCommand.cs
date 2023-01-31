@@ -1,61 +1,61 @@
-﻿namespace FaceIO.Commands.PersonImage
+﻿namespace FaceIO.Commands.Face
 {
     using Amazon.S3;
     using Amazon.S3.Model;
     using Contracts.Common.Database.Context;
-    using Domain.PersonImage.Entities;
-    using Domain.PersonImage.Repositories;
     using Contracts.Common.Settings;
+    using Domain.Face.Entities;
+    using Domain.Face.Repositories;
     using MediatR;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class RemovePersonImageCommand : IRequest
+    public class RemoveFaceCommand : IRequest
     {
         public Guid CustomerUid { get; }
 
         public Guid PersonUid { get; }
 
-        public Guid PersonImageUid { get; }
+        public Guid FaceUid { get; }
 
-        public RemovePersonImageCommand(Guid customerUid, Guid personUid, Guid personImageUid)
+        public RemoveFaceCommand(Guid customerUid, Guid personUid, Guid faceUid)
         {
             CustomerUid = customerUid;
             PersonUid = personUid;
-            PersonImageUid = personImageUid;
+            FaceUid = faceUid;
         }
     }
 
-    public class RemovePersonImageCommandHandler : IRequestHandler<RemovePersonImageCommand>
+    public class RemoveFaceCommandHandler : IRequestHandler<RemoveFaceCommand>
     {
         private readonly IAmazonS3 _awsS3;
         private readonly IAwsSettings _awsSettings;
         private readonly IFaceIODbContext _dbContext;
-        private readonly IPersonImagesRepository _personImagesRepository;
+        private readonly IFacesRepository _facesRepository;
 
-        public RemovePersonImageCommandHandler(IAmazonS3 awsS3,
-                                               IAwsSettings awsSettings,
-                                               IFaceIODbContext dbContext,
-                                               IPersonImagesRepository personImagesRepository)
+        public RemoveFaceCommandHandler(IAmazonS3 awsS3,
+                                        IAwsSettings awsSettings,
+                                        IFaceIODbContext dbContext,
+                                        IFacesRepository facesRepository)
         {
             _awsS3 = awsS3;
             _awsSettings = awsSettings;
             _dbContext = dbContext;
-            _personImagesRepository = personImagesRepository;
+            _facesRepository = facesRepository;
         }
 
-        public async Task<Unit> Handle(RemovePersonImageCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(RemoveFaceCommand command, CancellationToken cancellationToken)
         {
-            PersonImage personImage = await _personImagesRepository.GetPersonImageAsync(customerUid: command.CustomerUid, personUid: command.PersonUid, personImageUid: command.PersonImageUid);
+            Face face = await _facesRepository.GetFaceAsync(customerUid: command.CustomerUid, personUid: command.PersonUid, faceUid: command.FaceUid);
 
-            personImage.MarkAsDeleted();
+            face.MarkAsDeleted();
 
             try
             {
                 var request = new DeleteObjectRequest
                 {
-                    Key = personImage.FileName,
+                    Key = face.FileName,
                     BucketName = _awsSettings.BucketName
                 };
 

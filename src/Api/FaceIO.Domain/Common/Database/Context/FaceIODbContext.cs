@@ -19,7 +19,7 @@
             modelBuilder.ApplyConfiguration(new GroupLocationMapping());
             modelBuilder.ApplyConfiguration(new GroupMapping());
             modelBuilder.ApplyConfiguration(new LocationMapping());
-            modelBuilder.ApplyConfiguration(new PersonImageMapping());
+            modelBuilder.ApplyConfiguration(new FaceMapping());
             modelBuilder.ApplyConfiguration(new PersonInGroupMapping());
             modelBuilder.ApplyConfiguration(new PersonMapping());
         }

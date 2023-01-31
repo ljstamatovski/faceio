@@ -1,11 +1,11 @@
-﻿namespace FaceIO.Domain.PersonImage.Entities
+﻿namespace FaceIO.Domain.Face.Entities
 {
     using Common.Entities;
     using Person.Entities;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class PersonImage : Entity
+    public class Face : Entity
     {
         public int PersonFk { get; protected internal set; }
 
@@ -18,7 +18,7 @@
         {
             if (DeletedOn.HasValue)
             {
-                throw new ValidationException("Can not delete person image, person image is already deleted.");
+                throw new ValidationException("Can not delete face, face is already deleted.");
             }
 
             DeletedOn = DateTime.UtcNow;
@@ -26,9 +26,9 @@
 
         public static class Factory
         {
-            public static PersonImage Create(string fileName, int personId)
+            public static Face Create(string fileName, int personId)
             {
-                return new PersonImage
+                return new Face
                 {
                     Uid = Guid.NewGuid(),
                     CreatedOn = DateTime.UtcNow,

@@ -1,4 +1,4 @@
-﻿namespace FaceIO.Commands.PersonImage
+﻿namespace FaceIO.Commands.Face
 {
     using Amazon.S3;
     using Amazon.S3.Model;
@@ -7,13 +7,13 @@
     using Contracts.Common.Settings;
     using Domain.Person.Entities;
     using Domain.Person.Repositories;
-    using Domain.PersonImage.Entities;
+    using Domain.Face.Entities;
     using MediatR;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class AddPersonImageCommand : IRequest
+    public class AddFaceCommand : IRequest
     {
         public Guid CustomerUid { get; }
 
@@ -21,7 +21,7 @@
 
         public UploadImageRequest ImageRequest { get; }
 
-        public AddPersonImageCommand(Guid customerUid, Guid personUid, UploadImageRequest imageRequest)
+        public AddFaceCommand(Guid customerUid, Guid personUid, UploadImageRequest imageRequest)
         {
             CustomerUid = customerUid;
             PersonUid = personUid;
@@ -29,14 +29,14 @@
         }
     }
 
-    public class AddPersonImageCommandHandler : IRequestHandler<AddPersonImageCommand>
+    public class AddFaceCommandHandler : IRequestHandler<AddFaceCommand>
     {
         private readonly IAmazonS3 _awsS3;
         private readonly IAwsSettings _awsSettings;
         private readonly IFaceIODbContext _dbContext;
         private readonly IPersonsRepository _personsRepository;
 
-        public AddPersonImageCommandHandler(IAmazonS3 awsS3, IAwsSettings awsSettings, IFaceIODbContext dbContext, IPersonsRepository personsRepository)
+        public AddFaceCommandHandler(IAmazonS3 awsS3, IAwsSettings awsSettings, IFaceIODbContext dbContext, IPersonsRepository personsRepository)
         {
             _awsS3 = awsS3;
             _awsSettings = awsSettings;
@@ -44,7 +44,7 @@
             _personsRepository = personsRepository;
         }
 
-        public async Task<Unit> Handle(AddPersonImageCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AddFaceCommand command, CancellationToken cancellationToken)
         {
             Person person = await _personsRepository.GetPersonAsync(command.CustomerUid, command.PersonUid);
 
@@ -69,9 +69,9 @@
                 throw new Exception($"Unknown encountered on server. Message:'{e?.Message}' when writing an object", e);
             }
 
-            var personImage = PersonImage.Factory.Create(request.Key, person.Id);
+            var face = Face.Factory.Create(request.Key, person.Id);
 
-            await _dbContext.Set<PersonImage>().AddAsync(personImage, cancellationToken);
+            await _dbContext.Set<Face>().AddAsync(face, cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

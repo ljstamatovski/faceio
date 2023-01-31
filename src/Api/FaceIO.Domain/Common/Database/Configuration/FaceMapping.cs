@@ -1,14 +1,14 @@
 ﻿namespace FaceIO.Domain.Common.Database.Configuration
 {
+    using Face.Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using PersonImage.Entities;
 
-    public class PersonImageMapping : IEntityTypeConfiguration<PersonImage>
+    public class FaceMapping : IEntityTypeConfiguration<Face>
     {
-        public void Configure(EntityTypeBuilder<PersonImage> builder)
+        public void Configure(EntityTypeBuilder<Face> builder)
         {
-            builder.ToTable("PersonImage", "dbo");
+            builder.ToTable("Face", "dbo");
 
             builder.HasKey(x => x.Id);
 
