@@ -2,6 +2,7 @@
 {
     using Common.Entities;
     using Customer.Entities;
+    using GroupLocation.Entities;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,10 +12,19 @@
 
         public string? Description { get; protected internal set; }
 
+        public string CollectionId { get; protected internal set; } = string.Empty;
+
         public int CustomerFk { get; protected internal set; }
 
         [ForeignKey(nameof(CustomerFk))]
         public Customer Customer { get; protected internal set; } = null!;
+
+        public ICollection<GroupLocation> LocationGroups { get; protected internal set; }
+
+        public Location()
+        {
+            LocationGroups = new List<GroupLocation>();
+        }
 
         public Location SetName(string name)
         {
@@ -50,18 +60,36 @@
             DeletedOn = DateTime.UtcNow;
         }
 
+        public void AddGroup(int groupId)
+        {
+            var groupLocation = GroupLocation.Factory.Create(groupFk: groupId, locationFk: Id);
+
+            LocationGroups.Add(groupLocation);
+        }
+
+        public void RemoveGroup(Guid groupUid)
+        {
+            GroupLocation locationGroup = LocationGroups.Single(x => x.Group.Uid == groupUid);
+
+            locationGroup.MarkAsDeleted();
+        }
+
         public static class Factory
         {
-            public static Location Create(string name, string? description, int customerId)
+            public static Location Create(string name, string? description, Customer customer)
             {
-                return new Location
+                var location = new Location
                 {
                     Uid = Guid.NewGuid(),
                     CreatedOn = DateTime.UtcNow,
                     Name = name,
                     Description = description,
-                    CustomerFk = customerId
+                    Customer = customer
                 };
+
+                location.CollectionId = $"{customer.Uid}/{location.Uid}";
+
+                return location;
             }
         }
     }

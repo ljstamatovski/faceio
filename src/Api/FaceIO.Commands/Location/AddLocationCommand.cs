@@ -1,5 +1,7 @@
 ﻿namespace FaceIO.Commands.Location
 {
+    using Amazon.Rekognition;
+    using Amazon.Rekognition.Model;
     using Contracts.Common.Database.Context;
     using Domain.Customer.Entities;
     using Domain.Customer.Repositories;
@@ -28,11 +30,16 @@
     {
         private readonly IFaceIODbContext _dbContext;
         private readonly ICustomersRepository _customersRepository;
+        private readonly IAmazonRekognition _amazonRekognition;
 
-        public AddLocationCommandHandler(IFaceIODbContext dbContext, ICustomersRepository customersRepository)
+        public AddLocationCommandHandler(
+            IFaceIODbContext dbContext,
+            ICustomersRepository customersRepository,
+            IAmazonRekognition amazonRekognition)
         {
             _dbContext = dbContext;
             _customersRepository = customersRepository;
+            _amazonRekognition = amazonRekognition;
         }
 
         public async Task<Unit> Handle(AddLocationCommand request, CancellationToken cancellationToken)
@@ -41,11 +48,18 @@
 
             Location location = Location.Factory.Create(name: request.Name,
                                                         description: request.Description,
-                                                        customerId: customer.Id);
+                                                        customer: customer);
 
-            customer.Locations.Add(location);
+            await _dbContext.Set<Location>().AddAsync(location, cancellationToken);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+
+            var createCollectionRequest = new CreateCollectionRequest()
+            {
+                CollectionId = location.CollectionId
+            };
+
+            await _amazonRekognition.CreateCollectionAsync(createCollectionRequest, cancellationToken);
 
             return Unit.Value;
         }

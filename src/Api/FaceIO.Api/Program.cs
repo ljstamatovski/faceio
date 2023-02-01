@@ -1,4 +1,5 @@
 using Amazon;
+using Amazon.Rekognition;
 using Amazon.S3;
 using FaceIO.Api.Settings;
 using FaceIO.Commands.Common;
@@ -8,7 +9,6 @@ using FaceIO.Domain.Common.Database.Context;
 using FaceIO.Domain.Customer.Repositories;
 using FaceIO.Domain.Face.Repositories;
 using FaceIO.Domain.Group.Repositories;
-using FaceIO.Domain.GroupLocation.Repositories;
 using FaceIO.Domain.Location.Repositories;
 using FaceIO.Domain.Person.Repositories;
 using FaceIO.Domain.PersonInGroup.Repositories;
@@ -36,11 +36,17 @@ builder.Services.AddScoped<IAmazonS3>(serviceProvider =>
     return new AmazonS3Client(awsSetings.AccessKey, awsSetings.AccessSecretKey, RegionEndpoint.EUCentral1);
 });
 
+builder.Services.AddScoped<IAmazonRekognition>(serviceProvider =>
+{
+    var awsSetings = serviceProvider.GetRequiredService<IAwsSettings>();
+
+    return new AmazonRekognitionClient(awsSetings.AccessKey, awsSetings.AccessSecretKey, RegionEndpoint.EUCentral1);
+});
+
 builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
 builder.Services.AddScoped<ILocationsRepository, LocationsRepository>();
 builder.Services.AddScoped<IGroupsRepository, GroupsRepository>();
 builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
-builder.Services.AddScoped<IGroupLocationsRepository, GroupLocationsRepository>();
 builder.Services.AddScoped<IFacesRepository, FacesRepository>();
 builder.Services.AddScoped<IPersonsInGroupsRepository, PersonsInGroupsRepository>();
 

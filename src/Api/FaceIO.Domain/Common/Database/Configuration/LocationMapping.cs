@@ -17,6 +17,7 @@
             builder.Property(x => x.DeletedOn).HasColumnName("DeletedOn").HasColumnType("smalldatetime");
             builder.Property(x => x.Name).HasColumnName("Name").HasColumnType("nvarchar(150)").HasMaxLength(150).IsRequired();
             builder.Property(x => x.Description).HasColumnName("Description").HasColumnType("nvarchar(300)").HasMaxLength(300);
+            builder.Property(x => x.CollectionId).HasColumnName("CollectionId").HasColumnType("nvarchar(75)").HasMaxLength(75).IsRequired();
 
             builder.Property(x => x.CustomerFk).HasColumnName("CustomerFk").HasColumnType("int").IsRequired();
         }

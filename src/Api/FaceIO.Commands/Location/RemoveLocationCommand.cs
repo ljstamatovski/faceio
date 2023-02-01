@@ -1,8 +1,12 @@
 ﻿namespace FaceIO.Commands.Location
 {
+    using Amazon.Rekognition;
+    using Amazon.Rekognition.Model;
     using Contracts.Common.Database.Context;
-    using Domain.Location.Entities;
-    using Domain.Location.Repositories;
+    using FaceIO.Domain.Customer.Entities;
+    using FaceIO.Domain.Customer.Repositories;
+    using FaceIO.Domain.Location.Entities;
+    using FaceIO.Domain.Location.Repositories;
     using MediatR;
     using System.Threading;
     using System.Threading.Tasks;
@@ -24,11 +28,16 @@
     {
         private readonly IFaceIODbContext _dbContext;
         private readonly ILocationsRepository _locationsRepository;
+        private readonly IAmazonRekognition _amazonRekognition;
 
-        public RemoveLocationCommandHandler(IFaceIODbContext dbContext, ILocationsRepository locationsRepository)
+        public RemoveLocationCommandHandler(
+            IFaceIODbContext dbContext,
+            ILocationsRepository locationsRepository,
+            IAmazonRekognition amazonRekognition)
         {
             _dbContext = dbContext;
             _locationsRepository = locationsRepository;
+            _amazonRekognition = amazonRekognition;
         }
 
         public async Task<Unit> Handle(RemoveLocationCommand request, CancellationToken cancellationToken)
@@ -38,6 +47,13 @@
             location.MarkAsDeleted();
 
             await _dbContext.SaveChangesAsync(cancellationToken);
+
+            var deleteCollectionRequest = new DeleteCollectionRequest()
+            {
+                CollectionId = location.CollectionId
+            };
+
+            await _amazonRekognition.DeleteCollectionAsync(deleteCollectionRequest, cancellationToken);
 
             return Unit.Value;
         }
