@@ -1,14 +1,14 @@
 ﻿namespace FaceIO.Domain.Common.Database.Configuration
 {
-    using GroupLocation.Entities;
+    using GroupAccessToLocation.Entities;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-    internal class GroupLocationMapping : IEntityTypeConfiguration<GroupLocation>
+    internal class GroupAccessToLocationMapping : IEntityTypeConfiguration<GroupAccessToLocation>
     {
-        public void Configure(EntityTypeBuilder<GroupLocation> builder)
+        public void Configure(EntityTypeBuilder<GroupAccessToLocation> builder)
         {
-            builder.ToTable("GroupLocation", "dbo");
+            builder.ToTable("GroupAccessToLocation", "dbo");
 
             builder.HasKey(x => x.Id);
 

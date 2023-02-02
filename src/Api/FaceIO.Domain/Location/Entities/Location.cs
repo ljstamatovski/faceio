@@ -2,7 +2,7 @@
 {
     using Common.Entities;
     using Customer.Entities;
-    using GroupLocation.Entities;
+    using GroupAccessToLocation.Entities;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,11 +19,11 @@
         [ForeignKey(nameof(CustomerFk))]
         public Customer Customer { get; protected internal set; } = null!;
 
-        public ICollection<GroupLocation> LocationGroups { get; protected internal set; }
+        public ICollection<GroupAccessToLocation> GroupsWithAccessToLocation { get; protected internal set; }
 
         public Location()
         {
-            LocationGroups = new List<GroupLocation>();
+            GroupsWithAccessToLocation = new List<GroupAccessToLocation>();
         }
 
         public Location SetName(string name)
@@ -60,18 +60,20 @@
             DeletedOn = DateTime.UtcNow;
         }
 
-        public void AddGroup(int groupId)
+        public GroupAccessToLocation AddGroup(int groupId)
         {
-            var groupLocation = GroupLocation.Factory.Create(groupFk: groupId, locationFk: Id);
+            var groupAccessToLocation = GroupAccessToLocation.Factory.Create(groupFk: groupId, locationFk: Id);
 
-            LocationGroups.Add(groupLocation);
+            GroupsWithAccessToLocation.Add(groupAccessToLocation);
+
+            return groupAccessToLocation;
         }
 
         public void RemoveGroup(Guid groupUid)
         {
-            GroupLocation locationGroup = LocationGroups.Single(x => x.Group.Uid == groupUid);
+            GroupAccessToLocation groupAccessToLocation = GroupsWithAccessToLocation.Single(x => x.Group.Uid == groupUid);
 
-            locationGroup.MarkAsDeleted();
+            groupAccessToLocation.MarkAsDeleted();
         }
 
         public static class Factory

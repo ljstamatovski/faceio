@@ -16,12 +16,12 @@
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new CustomerMapping());
-            modelBuilder.ApplyConfiguration(new GroupLocationMapping());
+            modelBuilder.ApplyConfiguration(new GroupAccessToLocationMapping());
             modelBuilder.ApplyConfiguration(new GroupMapping());
             modelBuilder.ApplyConfiguration(new LocationMapping());
-            modelBuilder.ApplyConfiguration(new FaceMapping());
             modelBuilder.ApplyConfiguration(new PersonInGroupMapping());
             modelBuilder.ApplyConfiguration(new PersonMapping());
+            modelBuilder.ApplyConfiguration(new PersonAccessToLocationMapping());
         }
     }
 }

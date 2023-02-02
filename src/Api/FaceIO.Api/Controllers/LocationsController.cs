@@ -1,7 +1,6 @@
 ﻿namespace FaceIO.Api.Controllers
 {
     using FaceIO.Commands.Location;
-    using FaceIO.Contracts.Common;
     using FaceIO.Contracts.Location;
     using FaceIO.Queries.Features.Location;
     using MediatR;
@@ -42,13 +41,5 @@
         [Route("{locationUid:guid}")]
         public async Task<IActionResult> DeleteLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid)
             => Ok(await _mediator.Send(new RemoveLocationCommand(customerUid: customerUid, locationUid: locationUid)));
-
-        [HttpDelete]
-        [Route("{locationUid:guid}/verify")]
-        public async Task<IActionResult> VerifyAccessToLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid, IFormFile image)
-            => Ok(await _mediator.Send(new VerifyAccessToLocationCommand(
-                customerUid: customerUid,
-                locationUid: locationUid,
-                imageRequest: new VerifyImageRequest { Name = image.Name, FileName = image.FileName, ContentType = image.ContentType, FileStream = image.OpenReadStream() })));
     }
 }

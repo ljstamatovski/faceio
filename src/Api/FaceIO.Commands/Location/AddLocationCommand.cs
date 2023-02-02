@@ -30,16 +30,16 @@
     {
         private readonly IFaceIODbContext _dbContext;
         private readonly ICustomersRepository _customersRepository;
-        private readonly IAmazonRekognition _amazonRekognition;
+        private readonly IAmazonRekognition _awsRekognition;
 
         public AddLocationCommandHandler(
             IFaceIODbContext dbContext,
             ICustomersRepository customersRepository,
-            IAmazonRekognition amazonRekognition)
+            IAmazonRekognition awsRekognition)
         {
             _dbContext = dbContext;
             _customersRepository = customersRepository;
-            _amazonRekognition = amazonRekognition;
+            _awsRekognition = awsRekognition;
         }
 
         public async Task<Unit> Handle(AddLocationCommand request, CancellationToken cancellationToken)
@@ -50,7 +50,7 @@
                                                         description: request.Description,
                                                         customer: customer);
 
-            await _dbContext.Set<Location>().AddAsync(location, cancellationToken);
+            _dbContext.Set<Location>().Add(location);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
@@ -59,7 +59,7 @@
                 CollectionId = location.CollectionId
             };
 
-            await _amazonRekognition.CreateCollectionAsync(createCollectionRequest, cancellationToken);
+            await _awsRekognition.CreateCollectionAsync(createCollectionRequest, cancellationToken);
 
             return Unit.Value;
         }

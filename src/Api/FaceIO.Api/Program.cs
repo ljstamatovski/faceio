@@ -7,7 +7,6 @@ using FaceIO.Contracts.Common.Database.Context;
 using FaceIO.Contracts.Common.Settings;
 using FaceIO.Domain.Common.Database.Context;
 using FaceIO.Domain.Customer.Repositories;
-using FaceIO.Domain.Face.Repositories;
 using FaceIO.Domain.Group.Repositories;
 using FaceIO.Domain.Location.Repositories;
 using FaceIO.Domain.Person.Repositories;
@@ -47,7 +46,6 @@ builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
 builder.Services.AddScoped<ILocationsRepository, LocationsRepository>();
 builder.Services.AddScoped<IGroupsRepository, GroupsRepository>();
 builder.Services.AddScoped<IPersonsRepository, PersonsRepository>();
-builder.Services.AddScoped<IFacesRepository, FacesRepository>();
 builder.Services.AddScoped<IPersonsInGroupsRepository, PersonsInGroupsRepository>();
 
 builder.Services.AddMediatR(new[] { typeof(QueriesAssemblyMarker).Assembly, typeof(CommandsAssemblyMarker).Assembly });

@@ -21,7 +21,7 @@
             => Ok(await _mediator.Send(new AddPersonInGroupCommand(customerUid: customerUid, groupUid: groupUid, personUid: personUid)));
 
         [HttpDelete]
-        [Route("{groupLocationUid:guid}")]
+        [Route("{personInGroupUid:guid}")]
         public async Task<IActionResult> RemovePersonFromGroupAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid, [FromRoute] Guid personUid, [FromRoute] Guid personInGroupUid)
             => Ok(await _mediator.Send(new RemovePersonFromGroupCommand(customerUid: customerUid, groupUid: groupUid, personUid: personUid, personInGroupUid: personInGroupUid)));
     }

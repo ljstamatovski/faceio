@@ -1,7 +1,6 @@
 ﻿namespace FaceIO.Commands.Customer
 {
     using Contracts.Common.Database.Context;
-    using Contracts.Customer;
     using Domain.Customer.Entities;
     using MediatR;
     using System.Threading;

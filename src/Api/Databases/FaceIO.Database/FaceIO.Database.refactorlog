@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="58c17c71-da6c-4e94-9b92-11103e597308" ChangeDateTime="02/01/2023 21:47:20">
+    <Property Name="ElementName" Value="[dbo].[Person].[FaceFileKey]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Person]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="BucketKey" />
+  </Operation>
+</Operations>

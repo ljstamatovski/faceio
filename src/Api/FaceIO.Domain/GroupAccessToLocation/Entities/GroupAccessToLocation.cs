@@ -1,4 +1,4 @@
-﻿namespace FaceIO.Domain.GroupLocation.Entities
+﻿namespace FaceIO.Domain.GroupAccessToLocation.Entities
 {
     using Common.Entities;
     using Group.Entities;
@@ -6,7 +6,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public class GroupLocation : Entity
+    public class GroupAccessToLocation : Entity
     {
         public int GroupFk { get; protected internal set; }
 
@@ -22,7 +22,7 @@
         {
             if (DeletedOn.HasValue)
             {
-                throw new ValidationException("Can not delete group location, group location is already deleted.");
+                throw new ValidationException("Can not delete group access to location, group access to location is already deleted.");
             }
 
             DeletedOn = DateTime.UtcNow;
@@ -30,9 +30,9 @@
 
         public static class Factory
         {
-            public static GroupLocation Create(int groupFk, int locationFk)
+            public static GroupAccessToLocation Create(int groupFk, int locationFk)
             {
-                return new GroupLocation
+                return new GroupAccessToLocation
                 {
                     Uid = Guid.NewGuid(),
                     CreatedOn = DateTime.UtcNow,
@@ -41,6 +41,5 @@
                 };
             }
         }
-
     }
 }

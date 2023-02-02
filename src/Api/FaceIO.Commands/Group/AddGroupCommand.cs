@@ -44,7 +44,7 @@
                                                description: request.Description,
                                                customerId: customer.Id);
 
-            customer.Groups.Add(group);
+            _dbContext.Set<Group>().Add(group);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

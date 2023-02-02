@@ -28,16 +28,16 @@
     {
         private readonly IFaceIODbContext _dbContext;
         private readonly ILocationsRepository _locationsRepository;
-        private readonly IAmazonRekognition _amazonRekognition;
+        private readonly IAmazonRekognition _awsRekognition;
 
         public RemoveLocationCommandHandler(
             IFaceIODbContext dbContext,
             ILocationsRepository locationsRepository,
-            IAmazonRekognition amazonRekognition)
+            IAmazonRekognition awsRekognition)
         {
             _dbContext = dbContext;
             _locationsRepository = locationsRepository;
-            _amazonRekognition = amazonRekognition;
+            _awsRekognition = awsRekognition;
         }
 
         public async Task<Unit> Handle(RemoveLocationCommand request, CancellationToken cancellationToken)
@@ -53,7 +53,7 @@
                 CollectionId = location.CollectionId
             };
 
-            await _amazonRekognition.DeleteCollectionAsync(deleteCollectionRequest, cancellationToken);
+            await _awsRekognition.DeleteCollectionAsync(deleteCollectionRequest, cancellationToken);
 
             return Unit.Value;
         }

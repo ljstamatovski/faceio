@@ -2,7 +2,7 @@
 {
     using Common.Entities;
     using Customer.Entities;
-    using Face.Entities;
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -10,15 +10,12 @@
     {
         public string Name { get; internal set; } = string.Empty;
 
+        public string? FileName { get; internal set; }
+
         public int CustomerFk { get; internal set; }
 
         [ForeignKey(nameof(CustomerFk))]
         public Customer Customer { get; } = null!;
-
-        public int FaceFk { get; set; }
-
-        [ForeignKey(nameof(FaceFk))]
-        public Face Face { get; set; } = null!;
 
         public Person SetName(string name)
         {
@@ -28,6 +25,17 @@
             }
 
             Name = name;
+
+            return this;
+        }
+        public Person SetFileName(Guid customerUid, string fileName)
+        {
+            if (DeletedOn.HasValue)
+            {
+                throw new ValidationException("Can not set bucket key, person is deleted.");
+            }
+
+            FileName = $"{customerUid}/{Uid}/{fileName}";
 
             return this;
         }

@@ -5,8 +5,10 @@
     using Contracts.Common.Exceptions;
     using Customer.Entities;
     using Entities;
-    using Group.Entities;
-    using GroupLocation.Entities;
+    using FaceIO.Domain.Group.Entities;
+    using FaceIO.Domain.GroupAccessToLocation.Entities;
+    using FaceIO.Domain.Person.Entities;
+    using FaceIO.Domain.PersonInGroup.Entities;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Threading.Tasks;
@@ -33,29 +35,18 @@
             return location;
         }
 
-        public async Task<object> GetGroupsWithLocationAccessAsync(Guid customerUid, Guid locationUid)
+        public async Task<IReadOnlyList<Location>> GetPersonLocationsAsync(Guid customerUid, Guid personUid)
         {
-            var p = await (from dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
-                           join dbLocation in All<Location>().Where(x => x.Uid == locationUid)
-                           on dbCustomer.Id equals dbLocation.CustomerFk
-                           join dbGroupLocation in All<GroupLocation>()
-                           on dbLocation.Id equals dbGroupLocation.LocationFk
-                           join dbGroup in All<Group>().Include(x => x.PersonsInGroup)
-                                                       .ThenInclude(x => x.Person)
-                                                       .ThenInclude(x => x.Face)
-                           on dbGroupLocation.GroupFk equals dbGroup.Id
-                           select new
-                           {
-                               dbGroup.Name,
-                               dbGroup.Description,
-                               Persons = dbGroup.PersonsInGroup.Select(dbPersonInGroup => new
-                               {
-                                   dbPersonInGroup.Person.Name,
-                                   dbPersonInGroup.Person.Face.FileName
-                               }).ToList()
-                           }).ToListAsync();
-
-            return p;
+            return await (from dbPerson in All<Person>().Where(x => x.Uid == personUid)
+                          join dbPersonInGroup in All<PersonInGroup>()
+                          on dbPerson.Id equals dbPersonInGroup.PersonFk
+                          join dbGroup in All<Group>()
+                          on dbPersonInGroup.GroupFk equals dbGroup.Id
+                          join dbGroupAccessToLocation in All<GroupAccessToLocation>()
+                          on dbGroup.Id equals dbGroupAccessToLocation.GroupFk
+                          join dbLocation in All<Location>()
+                          on dbGroupAccessToLocation.LocationFk equals dbLocation.Id
+                          select dbLocation).ToArrayAsync();
         }
     }
 }

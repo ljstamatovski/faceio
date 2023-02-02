@@ -1,61 +1,55 @@
-﻿namespace FaceIO.Commands.Face
+﻿namespace FaceIO.Commands.Person
 {
     using Amazon.S3;
     using Amazon.S3.Model;
-    using Contracts.Common.Database.Context;
-    using Contracts.Common.Settings;
-    using Domain.Face.Entities;
-    using Domain.Face.Repositories;
+    using FaceIO.Contracts.Common.Database.Context;
+    using FaceIO.Contracts.Common.Settings;
+    using FaceIO.Domain.Person.Entities;
+    using FaceIO.Domain.Person.Repositories;
     using MediatR;
     using System;
-    using System.Threading;
     using System.Threading.Tasks;
 
-    public class RemoveFaceCommand : IRequest
+    public class RemovePersonFaceCommand : IRequest
     {
         public Guid CustomerUid { get; }
 
         public Guid PersonUid { get; }
 
-        public Guid FaceUid { get; }
-
-        public RemoveFaceCommand(Guid customerUid, Guid personUid, Guid faceUid)
+        public RemovePersonFaceCommand(Guid customerUid, Guid personUid, Guid faceUid)
         {
             CustomerUid = customerUid;
             PersonUid = personUid;
-            FaceUid = faceUid;
         }
     }
 
-    public class RemoveFaceCommandHandler : IRequestHandler<RemoveFaceCommand>
+    public class RemovePersonFaceCommandHandler : IRequestHandler<RemovePersonFaceCommand>
     {
         private readonly IAmazonS3 _awsS3;
         private readonly IAwsSettings _awsSettings;
         private readonly IFaceIODbContext _dbContext;
-        private readonly IFacesRepository _facesRepository;
+        private readonly IPersonsRepository _personsRepository;
 
-        public RemoveFaceCommandHandler(IAmazonS3 awsS3,
-                                        IAwsSettings awsSettings,
-                                        IFaceIODbContext dbContext,
-                                        IFacesRepository facesRepository)
+        public RemovePersonFaceCommandHandler(IAmazonS3 awsS3,
+                                              IAwsSettings awsSettings,
+                                              IFaceIODbContext dbContext,
+                                              IPersonsRepository personsRepository)
         {
             _awsS3 = awsS3;
             _awsSettings = awsSettings;
             _dbContext = dbContext;
-            _facesRepository = facesRepository;
+            _personsRepository = personsRepository;
         }
 
-        public async Task<Unit> Handle(RemoveFaceCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(RemovePersonFaceCommand command, CancellationToken cancellationToken)
         {
-            Face face = await _facesRepository.GetFaceAsync(customerUid: command.CustomerUid, personUid: command.PersonUid, faceUid: command.FaceUid);
-
-            face.MarkAsDeleted();
+            Person person = await _personsRepository.GetPersonAsync(customerUid: command.CustomerUid, personUid: command.PersonUid);
 
             try
             {
                 var request = new DeleteObjectRequest
                 {
-                    Key = face.FileName,
+                    Key = person.FileName,
                     BucketName = _awsSettings.BucketName
                 };
 

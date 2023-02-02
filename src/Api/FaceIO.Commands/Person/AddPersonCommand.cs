@@ -38,7 +38,7 @@
 
             Person person = Person.Factory.Create(name: request.Name, customerId: customer.Id);
 
-            customer.Persons.Add(person);
+            _dbContext.Set<Person>().Add(person);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

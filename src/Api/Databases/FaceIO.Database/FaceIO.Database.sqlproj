@@ -63,20 +63,23 @@
     <Folder Include="dbo\Tables\Group" />
     <Folder Include="dbo\Tables\PersonInGroup" />
     <Folder Include="dbo\Tables\Location" />
-    <Folder Include="dbo\Tables\Face" />
-    <Folder Include="dbo\Tables\GroupLocation" />
+    <Folder Include="dbo\Tables\GroupAccessToLocation" />
     <Folder Include="dbo\Tables\Customer" />
+    <Folder Include="dbo\Tables\PersonAccessToLocation" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Person\Person.sql" />
     <Build Include="dbo\Tables\Group\Group.sql" />
     <Build Include="dbo\Tables\PersonInGroup\PersonInGroup.sql" />
     <Build Include="dbo\Tables\Location\Location.sql" />
-    <Build Include="dbo\Tables\Face\Face.sql" />
-    <Build Include="dbo\Tables\GroupLocation\GroupLocation.sql" />
+    <Build Include="dbo\Tables\GroupAccessToLocation\GroupAccessToLocation.sql" />
     <Build Include="dbo\Tables\Customer\Customer.sql" />
+    <Build Include="dbo\Tables\PersonAccessToLocation\PersonAccessToLocation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FaceIO.Database.publish.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="FaceIO.Database.refactorlog" />
   </ItemGroup>
 </Project>
