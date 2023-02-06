@@ -19,8 +19,8 @@
             modelBuilder.ApplyConfiguration(new GroupAccessToLocationMapping());
             modelBuilder.ApplyConfiguration(new GroupMapping());
             modelBuilder.ApplyConfiguration(new LocationMapping());
-            modelBuilder.ApplyConfiguration(new PersonInGroupMapping());
             modelBuilder.ApplyConfiguration(new PersonMapping());
+            modelBuilder.ApplyConfiguration(new PersonInGroupMapping());
             modelBuilder.ApplyConfiguration(new PersonAccessToLocationMapping());
         }
     }

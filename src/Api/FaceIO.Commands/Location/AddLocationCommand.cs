@@ -7,6 +7,7 @@
     using Domain.Customer.Repositories;
     using Domain.Location.Entities;
     using MediatR;
+    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -52,14 +53,22 @@
 
             _dbContext.Set<Location>().Add(location);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
-
             var createCollectionRequest = new CreateCollectionRequest()
             {
                 CollectionId = location.CollectionId
             };
 
-            await _awsRekognition.CreateCollectionAsync(createCollectionRequest, cancellationToken);
+            CreateCollectionResponse response = await _awsRekognition.CreateCollectionAsync(createCollectionRequest, cancellationToken);
+
+            if (response.HttpStatusCode == HttpStatusCode.OK)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                //
+            }
+
 
             return Unit.Value;
         }

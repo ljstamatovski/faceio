@@ -8,6 +8,7 @@
     using FaceIO.Domain.Location.Entities;
     using FaceIO.Domain.Location.Repositories;
     using MediatR;
+    using System.Net;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -46,14 +47,22 @@
 
             location.MarkAsDeleted();
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
 
             var deleteCollectionRequest = new DeleteCollectionRequest()
             {
                 CollectionId = location.CollectionId
             };
 
-            await _awsRekognition.DeleteCollectionAsync(deleteCollectionRequest, cancellationToken);
+            DeleteCollectionResponse response = await _awsRekognition.DeleteCollectionAsync(deleteCollectionRequest, cancellationToken);
+
+            if (response.HttpStatusCode == HttpStatusCode.OK)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                //
+            }
 
             return Unit.Value;
         }

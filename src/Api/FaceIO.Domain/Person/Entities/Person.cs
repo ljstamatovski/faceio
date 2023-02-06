@@ -15,7 +15,7 @@
         public int CustomerFk { get; internal set; }
 
         [ForeignKey(nameof(CustomerFk))]
-        public Customer Customer { get; } = null!;
+        public Customer Customer { get; set; } = null!;
 
         public Person SetName(string name)
         {
@@ -28,6 +28,7 @@
 
             return this;
         }
+
         public Person SetFileName(Guid customerUid, string fileName)
         {
             if (DeletedOn.HasValue)

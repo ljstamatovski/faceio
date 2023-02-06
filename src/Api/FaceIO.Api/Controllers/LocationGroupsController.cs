@@ -17,12 +17,12 @@
 
         [HttpPost]
         [Route("")]
-        public async Task<IActionResult> AddGroupToLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid, [FromRoute] Guid locationUid)
+        public async Task<IActionResult> AddGroupToLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid, [FromRoute] Guid groupUid)
             => Ok(await _mediator.Send(new AddGroupToLocationCommand(customerUid: customerUid, groupUid: groupUid, locationUid: locationUid)));
 
         [HttpDelete]
         [Route("")]
-        public async Task<IActionResult> RemoveGroupFromLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid groupUid, [FromRoute] Guid locationUid)
+        public async Task<IActionResult> RemoveGroupFromLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid, [FromRoute] Guid groupUid)
             => Ok(await _mediator.Send(new RemoveGroupFromLocationCommand(customerUid: customerUid, groupUid: groupUid, locationUid: locationUid)));
     }
 }

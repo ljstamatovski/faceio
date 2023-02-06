@@ -3,13 +3,13 @@
     using Amazon.Rekognition;
     using Amazon.Rekognition.Model;
     using FaceIO.Contracts.Common.Database.Context;
-    using FaceIO.Contracts.Common.Settings;
     using FaceIO.Domain.Location.Entities;
     using FaceIO.Domain.Location.Repositories;
     using FaceIO.Domain.Person.Repositories;
     using FaceIO.Domain.PersonAccessToLocation.Entities;
     using MediatR;
     using System;
+    using System.Net;
     using System.Threading.Tasks;
 
     public class RemoveGroupFromLocationCommand : IRequest
@@ -70,9 +70,22 @@
                                                    .ToList()
             };
 
-            await _awsRekognition.DeleteFacesAsync(deleteFacesRequest);
+            HttpStatusCode responseStatusCode = HttpStatusCode.OK;
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            if (deleteFacesRequest.FaceIds.Any())
+            {
+                DeleteFacesResponse response = await _awsRekognition.DeleteFacesAsync(deleteFacesRequest, cancellationToken);
+                responseStatusCode = response.HttpStatusCode;
+            }
+
+            if (responseStatusCode == HttpStatusCode.OK)
+            {
+                await _dbContext.SaveChangesAsync(cancellationToken);
+            }
+            else
+            {
+                //
+            }
 
             return Unit.Value;
         }

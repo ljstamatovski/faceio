@@ -25,7 +25,9 @@
             Location? location = await (from dbLocation in All<Location>().Where(x => x.Uid == locationUid)
                                         join dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
                                         on dbLocation.CustomerFk equals dbCustomer.Id
-                                        select dbLocation).SingleOrDefaultAsync();
+                                        select dbLocation).Include(x => x.GroupsWithAccessToLocation)
+                                                          .ThenInclude(x => x.Group)
+                                                          .SingleOrDefaultAsync();
 
             if (location is null)
             {

@@ -2,6 +2,7 @@
 {
     using Common.Entities;
     using Customer.Entities;
+    using FaceIO.Contracts.Common.Exceptions;
     using GroupAccessToLocation.Entities;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -71,7 +72,12 @@
 
         public void RemoveGroup(Guid groupUid)
         {
-            GroupAccessToLocation groupAccessToLocation = GroupsWithAccessToLocation.Single(x => x.Group.Uid == groupUid);
+            GroupAccessToLocation? groupAccessToLocation = GroupsWithAccessToLocation.SingleOrDefault(x => x.Group.Uid == groupUid);
+
+            if (groupAccessToLocation is null)
+            {
+                throw new FaceIONotFoundException($"Group with uid {groupUid} not found."); ;
+            }
 
             groupAccessToLocation.MarkAsDeleted();
         }
@@ -89,7 +95,7 @@
                     Customer = customer
                 };
 
-                location.CollectionId = $"{customer.Uid}/{location.Uid}";
+                location.CollectionId = $"collection_{location.Uid}";
 
                 return location;
             }

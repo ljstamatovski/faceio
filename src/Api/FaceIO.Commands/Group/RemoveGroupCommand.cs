@@ -34,6 +34,13 @@
         {
             Group group = await _groupsRepository.GetGroupAsync(request.CustomerUid, request.GroupUid);
 
+            bool hasAccessToLocation = await _groupsRepository.HasGroupAccessToLocationAsync(request.CustomerUid, request.GroupUid);
+
+            if (hasAccessToLocation)
+            {
+                //
+            }
+
             group.MarkAsDeleted();
 
             await _dbContext.SaveChangesAsync(cancellationToken);

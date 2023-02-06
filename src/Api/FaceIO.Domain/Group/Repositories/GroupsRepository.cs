@@ -5,6 +5,7 @@
     using Contracts.Common.Exceptions;
     using Customer.Entities;
     using Group.Entities;
+    using GroupAccessToLocation.Entities;
     using Microsoft.EntityFrameworkCore;
 
     public class GroupsRepository : Repository<Group>, IGroupsRepository
@@ -26,6 +27,16 @@
             }
 
             return group;
+        }
+
+        public async Task<bool> HasGroupAccessToLocationAsync(Guid customerUid, Guid groupUid)
+        {
+            return await (from dbGroup in All<Group>().Where(x => x.Uid == groupUid)
+                          join dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
+                          on dbGroup.CustomerFk equals dbCustomer.Id
+                          join dbGroupAccessToLocation in All<GroupAccessToLocation>()
+                          on dbGroup.Id equals dbGroupAccessToLocation.GroupFk
+                          select dbGroupAccessToLocation.Id).AnyAsync();
         }
     }
 }

@@ -8,12 +8,12 @@
 
     public sealed class PersonInGroup : Entity
     {
-        public int GroupFk { get; set; }
+        public int GroupFk { get; internal set; }
 
         [ForeignKey(nameof(GroupFk))]
         public Group Group { get; set; } = null!;
 
-        public int PersonFk { get; set; }
+        public int PersonFk { get; internal set; }
 
         [ForeignKey(nameof(PersonFk))]
         public Person Person { get; set; } = null!;
