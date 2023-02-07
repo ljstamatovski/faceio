@@ -1,6 +1,7 @@
 ﻿namespace FaceIO.Api.Controllers
 {
     using FaceIO.Commands.Person;
+    using FaceIO.Contracts.Common;
     using FaceIO.Contracts.Person;
     using FaceIO.Queries.Features.Person;
     using MediatR;
@@ -31,6 +32,14 @@
         [Route("{personUid:guid}")]
         public async Task<IActionResult> GetPersonAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid)
             => Ok(await _mediator.Send(new GetPersonQuery(customerUid: customerUid, personUid: personUid)));
+
+        [HttpPost]
+        [Route("{personUid:guid}")]
+        public async Task<IActionResult> AddPersonFaceAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid, IFormFile image)
+            => Ok(await _mediator.Send(new AddPersonFaceCommand(
+                customerUid: customerUid,
+                personUid: personUid,
+                new UploadImageRequest { Name = image.Name, FileName = image.FileName, ContentType = image.ContentType, FileStream = image.OpenReadStream() })));
 
         [HttpPatch]
         [Route("{personUid:guid}")]

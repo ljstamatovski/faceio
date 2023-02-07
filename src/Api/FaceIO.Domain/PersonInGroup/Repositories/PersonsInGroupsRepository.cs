@@ -18,12 +18,12 @@
         {
         }
 
-        public async Task<PersonInGroup> GetPersonInGroupAsync(Guid customerUid, Guid groupUid, Guid personUid, Guid personInGroupUid)
+        public async Task<PersonInGroup> GetPersonInGroupAsync(Guid customerUid, Guid groupUid, Guid personUid)
         {
             PersonInGroup? personInGroup = await (from dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
                                                   join dbGroup in All<Group>().Where(x => x.Uid == groupUid)
                                                   on dbCustomer.Id equals dbGroup.CustomerFk
-                                                  join dbPersonInGroup in All<PersonInGroup>().Where(x => x.Uid == personInGroupUid)
+                                                  join dbPersonInGroup in All<PersonInGroup>()
                                                   on dbGroup.Id equals dbPersonInGroup.GroupFk
                                                   join dbPerson in All<Person>().Where(x => x.Uid == personUid)
                                                   on dbPersonInGroup.PersonFk equals dbPerson.Id
@@ -31,7 +31,7 @@
 
             if (personInGroup is null)
             {
-                throw new FaceIONotFoundException($"Person in group with uid {personInGroupUid} not found.");
+                throw new FaceIONotFoundException($"Person in group for person with uid {personUid} and group uid {groupUid} not found.");
             }
 
             return personInGroup;

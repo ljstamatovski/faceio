@@ -58,5 +58,23 @@
                           on dbGroupAccessToLocation.Id equals dbPersonAccessToLocation.GroupAccessToLocationFk
                           select dbPersonAccessToLocation).ToArrayAsync();
         }
+
+        public async Task<IReadOnlyList<PersonAccessToLocation>> GetPersonAccessToLocationsAsync(Guid customerUid, Guid groupUid, Guid personUid)
+        {
+            return await (from dbCustomer in All<Customer>().Where(x => x.Uid == customerUid)
+                          join dbPerson in All<Person>().Where(x => x.Uid == personUid)
+                          on dbCustomer.Id equals dbPerson.CustomerFk
+                          join dbPersonInGroup in All<PersonInGroup>()
+                          on dbPerson.Id equals dbPersonInGroup.PersonFk
+                          join dbGroup in All<Group>().Where(x => x.Uid == groupUid)
+                          on dbPersonInGroup.GroupFk equals dbGroup.Id
+                          join dbGroupAccessToLocation in All<GroupAccessToLocation>()
+                          on dbGroup.Id equals dbGroupAccessToLocation.GroupFk
+                          join dbPersonAccessToLocation in All<PersonAccessToLocation>()
+                          on dbGroupAccessToLocation.Id equals dbPersonAccessToLocation.GroupAccessToLocationFk
+                          select dbPersonAccessToLocation).Include(x => x.GroupAccessToLocation)
+                                                          .ThenInclude(x => x.Location)
+                                                          .ToArrayAsync();
+        }
     }
 }

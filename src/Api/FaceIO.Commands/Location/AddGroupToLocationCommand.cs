@@ -80,7 +80,6 @@
                         }
                     },
                     MaxFaces = 1,
-                    ExternalImageId = person.FileName,
                     CollectionId = location.CollectionId,
                     DetectionAttributes = new List<string>() { "DEFAULT" }
                 };

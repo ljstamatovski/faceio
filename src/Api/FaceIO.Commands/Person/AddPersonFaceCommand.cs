@@ -13,6 +13,7 @@
     using FaceIO.Domain.Person.Repositories;
     using MediatR;
     using System;
+    using System.Net;
     using System.Threading.Tasks;
 
     public class AddPersonFaceCommand : IRequest
@@ -72,22 +73,14 @@
 
             PutObjectResponse response = await _awsS3.PutObjectAsync(request, cancellationToken);
 
-            IReadOnlyList<Location> locations = await _locationsRepository.GetPersonLocationsAsync(command.CustomerUid, command.PersonUid);
-
-            foreach (Location location in locations)
+            if (response.HttpStatusCode == HttpStatusCode.OK)
             {
-                var indexFacesRequest = new IndexFacesRequest()
-                {
-                    Image = null,
-                    CollectionId = location.CollectionId,
-                    ExternalImageId = person.FileName,
-                    DetectionAttributes = new List<string>() { "DEFAULT" }
-                };
-
-                IndexFacesResponse indexFacesResponse = await _awsRekognition.IndexFacesAsync(indexFacesRequest);
+                await _dbContext.SaveChangesAsync(cancellationToken);
             }
-
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            else
+            {
+                // something
+            }
 
             return Unit.Value;
         }

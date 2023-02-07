@@ -84,7 +84,7 @@
             }
             else
             {
-                //
+                throw new Exception();
             }
 
             return Unit.Value;

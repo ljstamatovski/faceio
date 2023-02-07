@@ -12,7 +12,6 @@
         /// <param name="customerUid"> Uid of the customer. </param>
         /// <param name="groupUid"> Uid of the group. </param>
         /// <param name="personUid"> Uid of the person. </param>
-        /// <param name="personInGroupUid"> Uid of the person in group. </param>
-        Task<PersonInGroup> GetPersonInGroupAsync(Guid customerUid, Guid groupUid, Guid personUid, Guid personInGroupUid);
+        Task<PersonInGroup> GetPersonInGroupAsync(Guid customerUid, Guid groupUid, Guid personUid);
     }
 }

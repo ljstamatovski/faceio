@@ -72,14 +72,21 @@
 
         public void RemoveGroup(Guid groupUid)
         {
+            GroupAccessToLocation groupAccessToLocation = GetGroupAccessToLocation(groupUid);
+
+            groupAccessToLocation.MarkAsDeleted();
+        }
+
+        public GroupAccessToLocation GetGroupAccessToLocation(Guid groupUid)
+        {
             GroupAccessToLocation? groupAccessToLocation = GroupsWithAccessToLocation.SingleOrDefault(x => x.Group.Uid == groupUid);
 
             if (groupAccessToLocation is null)
             {
-                throw new FaceIONotFoundException($"Group with uid {groupUid} not found."); ;
+                throw new FaceIONotFoundException($"Group with uid {groupUid} not found.");
             }
 
-            groupAccessToLocation.MarkAsDeleted();
+            return groupAccessToLocation;
         }
 
         public static class Factory

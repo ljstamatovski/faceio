@@ -27,5 +27,14 @@
         /// <param name="groupUid"> Uid of the group. </param>
         /// <returns></returns>
         Task<IReadOnlyList<PersonAccessToLocation>> GetPersonsAccessToLocationAsync(Guid customerUid, Guid locationUid, Guid groupUid);
+
+        /// <summary>
+        /// Returns person accesses to locations through the given group.
+        /// </summary>
+        /// <param name="customerUid"> Uid of the customer. </param>
+        /// <param name="groupUid"> Uid of the group. </param>
+        /// <param name="personUid"> Uid of the person. </param>
+        /// <returns></returns>
+        Task<IReadOnlyList<PersonAccessToLocation>> GetPersonAccessToLocationsAsync(Guid customerUid, Guid groupUid, Guid personUid);
     }
 }
