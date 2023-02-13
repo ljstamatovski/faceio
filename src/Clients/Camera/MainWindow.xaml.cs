@@ -19,8 +19,8 @@
 
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private Guid _customerUid = new Guid("");
-        private Guid _locationUid = new Guid("");
+        private Guid _customerUid = new Guid("316f1c85-8e01-4749-845e-768b22219244");
+        private Guid _locationUid = new Guid("919f1e4f-025d-4ce2-b4ee-8223d23b278c");
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -36,7 +36,7 @@
         private IVideoSource _videoSource;
         private readonly BackgroundWorker _backgroundWorker;
 
-        private bool _isProcessingImage = true;
+        private bool _isProcessingImage = false;
 
         private static readonly CascadeClassifier _cascadeClasifier = new CascadeClassifier(@"Classifiers\haarcascade_frontalface_alt_tree.xml");
 
@@ -179,7 +179,7 @@
 
                     bitmap.Save(stream, jpgEncoder, encoderParameters);
 
-                    using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"https://localhost:49153/api/customers/{_customerUid}/locations/{_locationUid}/verify"))
+                    using (var request = new HttpRequestMessage(new HttpMethod("POST"), $"https://localhost:32768/api/customers/{_customerUid}/locations/{_locationUid}/verify"))
                     {
                         request.Headers.TryAddWithoutValidation("accept", "*/*");
 
@@ -188,7 +188,24 @@
                         multipartContent.Add(imageFile, "image", $"verify{DateTime.UtcNow.Minute}-{DateTime.UtcNow.Millisecond}.jpg");
                         request.Content = multipartContent;
 
-                        var response = await httpClient.SendAsync(request);
+                        HttpResponseMessage response = await httpClient.SendAsync(request);
+
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            bool.TryParse(await response.Content.ReadAsStringAsync(), out bool isVerified);
+
+                            if (isVerified)
+                            {
+                                Console.WriteLine("---------------------------------------------------------------------------");
+                                Console.WriteLine("Verified");
+                                Console.WriteLine("---------------------------------------------------------------------------");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Unverified");
+                            }
+                        }
                     }
                 }
             }
