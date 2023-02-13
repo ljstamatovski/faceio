@@ -5,6 +5,8 @@
     using FaceIO.Queries.Features.Location;
     using MediatR;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ViewFeatures;
+    using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
     [ApiController]
     [Route("api/customers/{customerUid:guid}/locations")]
@@ -26,6 +28,18 @@
         [Route("")]
         public async Task<IActionResult> CreateLocationAsync([FromRoute] Guid customerUid, [FromBody] CreateLocationRequest request)
             => Ok(await _mediator.Send(new AddLocationCommand(customerUid: customerUid, name: request.Name, description: request.Description)));
+
+        [HttpPost]
+        [Route("{locationUid:guid}")]
+        public async Task<IActionResult> VerifyAccessToLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid, IFormFile image)
+        {
+            var memoryStream = new MemoryStream();
+
+            using (Stream stream = image.OpenReadStream())
+                stream.CopyTo(memoryStream);
+
+            return Ok(await _mediator.Send(new VerifyAccessToLocationCommand(customerUid: customerUid, locationUid: locationUid, stream: memoryStream)));
+        }
 
         [HttpGet]
         [Route("{locationUid:guid}")]
