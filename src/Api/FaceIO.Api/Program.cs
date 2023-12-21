@@ -35,6 +35,14 @@ builder.Services.AddScoped<IAmazonS3>(serviceProvider =>
     return new AmazonS3Client(awsSetings.AccessKey, awsSetings.AccessSecretKey, RegionEndpoint.EUCentral1);
 });
 
+builder.Services.AddCors(f => f.AddPolicy("AllowAll", builder =>
+{
+    builder.AllowAnyMethod()
+           .AllowAnyHeader()
+           .AllowCredentials()
+           .SetIsOriginAllowed(_ => true);
+}));
+
 builder.Services.AddScoped<IAmazonRekognition>(serviceProvider =>
 {
     var awsSetings = serviceProvider.GetRequiredService<IAwsSettings>();
@@ -67,5 +75,7 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors("AllowAll");
 
 app.Run();
