@@ -1,0 +1,82 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+  <div fxFlex="95%">
+    <mat-card>
+      <mat-card-content>
+        <h2>Locations</h2>
+
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Home" #input />
+        </mat-form-field>
+
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              cdkDrag
+              sortActionDescription="Sort by name"
+            >
+              Name
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
+
+          <!-- Created On Column -->
+          <ng-container matColumnDef="createdOn">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              cdkDrag
+              sortActionDescription="Sort by created on"
+            >
+              Created On
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdOn | date }}
+            </td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef cdkDrag>Description</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.description }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: columns"
+            (dblclick)="navigateToDetails(row.uid)"
+          ></tr>
+
+          <!-- Row shown when there is no matching data. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No data matching the filter "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of locations"
+        >
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
