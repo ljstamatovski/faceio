@@ -1,7 +1,7 @@
 <h1>Add location</h1>
 <form>
   <mat-form-field>
-    <input matInput placeholder="Name" [(ngModel)]="name" />
+    <input matInput placeholder="Name" [(ngModel)]="name" name="name" />
   </mat-form-field>
   <br />
   <mat-form-field>
@@ -9,6 +9,7 @@
       matInput
       placeholder="Description"
       [(ngModel)]="description"
+      name="description"
     ></textarea>
   </mat-form-field>
   <br />

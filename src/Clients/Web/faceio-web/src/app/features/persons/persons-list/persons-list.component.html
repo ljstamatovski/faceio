@@ -1,0 +1,116 @@
+<div class="container" fxLayout="row" fxLayoutAlign="center none">
+  <div fxFlex="95%">
+    <mat-card>
+      <mat-card-content>
+        <h2>Locations</h2>
+        <mat-card-content
+          fxLayout="row"
+          fxLayout.lt-md="column"
+          fxLayoutAlign="space-between"
+        >
+          <mat-form-field fxFlex.lt-md="100" fxFlex.gt-md="60">
+            <mat-label>Filter</mat-label>
+            <input
+              matInput
+              (keyup)="applyFilter($event)"
+              placeholder="Ex. Home"
+              #input
+            />
+          </mat-form-field>
+
+          <div
+            fxFlex.lt-md="100"
+            fxFlex.gt-md="40"
+            fxLayout="row"
+            fxLayoutAlign="flex-end"
+          >
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="openAddPersonModal()"
+              fxFlex="20"
+            >
+              Add person
+            </button>
+          </div>
+        </mat-card-content>
+
+        <table
+          mat-table
+          [dataSource]="dataSource"
+          matSort
+          cdkDropList
+          cdkDropListOrientation="horizontal"
+          (cdkDropListDropped)="drop($event)"
+        >
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              cdkDrag
+              sortActionDescription="Sort by name"
+            >
+              Name
+            </th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
+
+          <!-- Created On Column -->
+          <ng-container matColumnDef="createdOn">
+            <th
+              mat-header-cell
+              *matHeaderCellDef
+              mat-sort-header
+              cdkDrag
+              sortActionDescription="Sort by created on"
+            >
+              Created On
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.createdOn | date }}
+            </td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef cdkDrag>Description</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.description }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-button (click)="onRemoveClick(element.uid)">
+                Remove
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: columns"
+            (dblclick)="navigateToDetails(row.uid)"
+          ></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">
+              No data matching the filter "{{ input.value }}"
+            </td>
+          </tr>
+        </table>
+
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          aria-label="Select page of persons"
+        >
+        </mat-paginator>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

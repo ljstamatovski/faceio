@@ -1,0 +1,20 @@
+<div class="container" fxLayout="column" fxLayoutAlign="start start" fxLayoutGap="20px">
+    <div fxFlex="50%">
+      <form [formGroup]="personForm">
+        <mat-card class="person-details-card">
+          <mat-card-content>
+            <h2 class="person-details-title">Person</h2>
+  
+            <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column">
+  
+              <mat-form-field class="person-details-field">
+                <mat-label>Name</mat-label>
+                <input matInput placeholder="Name" formControlName="name">
+              </mat-form-field>
+  
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+  </div>  

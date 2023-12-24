@@ -2,18 +2,18 @@
   padding: 20px;
 }
 
-.location-details-card {
+.person-details-card {
   width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.location-details-title {
+.person-details-title {
   margin-bottom: 16px;
   font-size: 24px;
   color: #333;
 }
 
-.location-details-field {
+.person-details-field {
   width: 100%;
   margin-bottom: 16px;
 }
