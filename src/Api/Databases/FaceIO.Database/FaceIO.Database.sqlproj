@@ -82,4 +82,11 @@
   <ItemGroup>
     <RefactorLog Include="FaceIO.Database.refactorlog" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="dbo\Tables\Customer\Customer.Seed.sql" />
+    <None Include="dbo\Tables\Location\Location.Seed.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
 </Project>

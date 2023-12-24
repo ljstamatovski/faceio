@@ -1,0 +1,21 @@
+/* Add your desired styling here */
+.container {
+    padding: 20px;
+  }
+  
+  .location-details-card {
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .location-details-title {
+    margin-bottom: 16px;
+    font-size: 24px;
+    color: #333;
+  }
+  
+  .location-details-field {
+    width: 100%;
+    margin-bottom: 16px;
+  }
+  

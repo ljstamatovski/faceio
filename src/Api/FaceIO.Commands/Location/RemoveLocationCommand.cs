@@ -47,7 +47,6 @@
 
             location.MarkAsDeleted();
 
-
             var deleteCollectionRequest = new DeleteCollectionRequest()
             {
                 CollectionId = location.CollectionId
