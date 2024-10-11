@@ -7,7 +7,9 @@
 	[CustomerFk]						INT								NOT NULL,
 	[Name]								NVARCHAR (150)					NOT NULL,
 	[FileName]							NVARCHAR (500)					NULL,
-	CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED ([Id] ASC),
+	[Email]								NVARCHAR(150)					NULL, 
+    [Phone]								NVARCHAR(20)					NULL, 
+    CONSTRAINT [PK_Person] PRIMARY KEY CLUSTERED ([Id] ASC),
 	CONSTRAINT [FK_Person_Customer] FOREIGN KEY ([CustomerFk]) REFERENCES [dbo].[Customer] ([Id])
 )
 

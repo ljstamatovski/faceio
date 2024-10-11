@@ -2,7 +2,7 @@
   <div fxFlex="95%">
     <mat-card>
       <mat-card-content>
-        <h2>Locations</h2>
+        <h2>People</h2>
         <mat-card-content
           fxLayout="row"
           fxLayout.lt-md="column"
@@ -84,8 +84,12 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let element">
-              <button mat-button (click)="onRemoveClick(element.uid)">
-                Remove
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="onRemoveClick(element.uid)"
+              >
+                <mat-icon>close</mat-icon>
               </button>
             </td>
           </ng-container>

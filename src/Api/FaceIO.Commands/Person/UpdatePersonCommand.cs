@@ -14,11 +14,17 @@
 
         public string Name { get; }
 
-        public UpdatePersonCommand(Guid customerUid, Guid personUid, string name)
+        public string? Email { get; }
+
+        public string? Phone { get; }
+
+        public UpdatePersonCommand(Guid customerUid, Guid personUid, string name, string? email, string? phone)
         {
             CustomerUid = customerUid;
             PersonUid = personUid;
             Name = name;
+            Email = email;
+            Phone = phone;
         }
     }
 
@@ -37,7 +43,9 @@
         {
             Person person = await _personsRepository.GetPersonAsync(command.CustomerUid, command.PersonUid);
 
-            person.SetName(command.Name);
+            person.SetName(command.Name)
+                .SetEmail(command.Email)
+                .SetPhone(command.Phone);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 

@@ -26,15 +26,29 @@
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> CreatePersonAsync([FromRoute] Guid customerUid, [FromBody] CreatePersonRequest request)
-            => Ok(await _mediator.Send(new AddPersonCommand(customerUid: customerUid, name: request.Name)));
+            => Ok(await _mediator.Send(new AddPersonCommand(
+                customerUid: customerUid,
+                name: request.Name,
+                email: request.Email,
+                phone: request.Phone)));
 
         [HttpGet]
         [Route("{personUid:guid}")]
         public async Task<IActionResult> GetPersonAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid)
             => Ok(await _mediator.Send(new GetPersonQuery(customerUid: customerUid, personUid: personUid)));
 
+        [HttpGet]
+        [Route("{personUid:guid}/face")]
+        public async Task<IActionResult> GetPersonFaceAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid)
+            => Ok(await _mediator.Send(new GetPersonFaceQuery(customerUid: customerUid, personUid: personUid)));
+
+        [HttpGet]
+        [Route("{personUid:guid}/groups")]
+        public async Task<IActionResult> GetPersonGroupsAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid)
+            => Ok(await _mediator.Send(new GetPersonGroupsQuery(customerUid: customerUid, personUid: personUid)));
+
         [HttpPost]
-        [Route("{personUid:guid}")]
+        [Route("{personUid:guid}/face")]
         public async Task<IActionResult> AddPersonFaceAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid, IFormFile image)
             => Ok(await _mediator.Send(new AddPersonFaceCommand(
                 customerUid: customerUid,
@@ -44,7 +58,12 @@
         [HttpPatch]
         [Route("{personUid:guid}")]
         public async Task<IActionResult> UpdatePersonAsync([FromRoute] Guid customerUid, [FromRoute] Guid personUid, [FromBody] UpdatePersonRequest request)
-            => Ok(await _mediator.Send(new UpdatePersonCommand(customerUid: customerUid, personUid: personUid, name: request.Name)));
+            => Ok(await _mediator.Send(new UpdatePersonCommand(
+                customerUid: customerUid,
+                personUid: personUid,
+                name: request.Name,
+                email: request.Email,
+                phone: request.Phone)));
 
         [HttpDelete]
         [Route("{personUid:guid}")]

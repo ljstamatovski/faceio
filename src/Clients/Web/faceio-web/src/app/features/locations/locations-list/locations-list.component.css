@@ -9,4 +9,10 @@ th.mat-sort-header-sorted {
 .mat-mdc-form-field {
     font-size: 14px;
     width: 100%;
-  }
+}
+
+.add-button {
+    margin-bottom: 16px;
+    align-self: flex-end;
+    margin-left: auto;
+}

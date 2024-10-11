@@ -45,7 +45,9 @@
                                            Id = dbPerson.Id,
                                            Uid = dbPerson.Uid,
                                            CreatedOn = dbPerson.CreatedOn,
-                                           Name = dbPerson.Name
+                                           Name = dbPerson.Name,
+                                           Email = dbPerson.Email,
+                                           Phone = dbPerson.Phone
                                        }).SingleOrDefaultAsync(cancellationToken);
 
             if (person is null)

@@ -14,9 +14,15 @@
 
         public string Name { get; }
 
-        public AddPersonCommand(Guid customerUid, string name)
+        public string? Email { get; set; }
+
+        public string? Phone { get; set; }
+
+        public AddPersonCommand(Guid customerUid, string name, string? email, string? phone)
         {
             Name = name;
+            Email = email;
+            Phone = phone;
             CustomerUid = customerUid;
         }
     }
@@ -36,7 +42,11 @@
         {
             Customer customer = await _customersRepository.GetCustomerAsync(request.CustomerUid);
 
-            Person person = Person.Factory.Create(name: request.Name, customerId: customer.Id);
+            Person person = Person.Factory.Create(
+                name: request.Name,
+                email: request.Email,
+                phone: request.Phone,
+                customerId: customer.Id);
 
             _dbContext.Set<Person>().Add(person);
 

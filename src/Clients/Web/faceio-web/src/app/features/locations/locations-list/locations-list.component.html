@@ -1,20 +1,31 @@
 <div class="container" fxLayout="row" fxLayoutAlign="center none">
-  <div fxFlex="95%">
+  <div fxFlex="95%" fxLayout="column" fxLayoutAlign="flex-end">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="openAddLocationModal()"
+      class="add-button"
+    >
+      Add location
+    </button>
     <mat-card>
       <mat-card-content>
         <h2>Locations</h2>
-        <mat-card-content fxLayout="row" fxLayout.lt-md="column" fxLayoutAlign="space-between">
+        <mat-card-content
+          fxLayout="row"
+          fxLayout.lt-md="column"
+          fxLayoutAlign="space-between"
+        >
           <mat-form-field fxFlex.lt-md="100" fxFlex.gt-md="60">
             <mat-label>Filter</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Home" #input />
+            <input
+              matInput
+              (keyup)="applyFilter($event)"
+              placeholder="Ex. Home"
+              #input
+            />
           </mat-form-field>
-  
-          <div fxFlex.lt-md="100" fxFlex.gt-md="40" fxLayout="row" fxLayoutAlign="flex-end">
-            <button mat-raised-button color="primary" (click)="openAddLocationModal()" fxFlex="20">
-              Add location
-            </button>
-          </div>
-          </mat-card-content>  
+        </mat-card-content>
 
         <table
           mat-table
@@ -65,7 +76,10 @@
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let element">
-              <button mat-button (click)="onRemoveClick(element.uid)">Remove</button>
+              <button mat-icon-button color="warn" (click)="onRemoveClick(element.uid)">
+                <mat-icon>close</mat-icon>
+              </button>
+    
             </td>
           </ng-container>
 

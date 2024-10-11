@@ -33,7 +33,7 @@
         {
             var memoryStream = new MemoryStream();
 
-            using (Stream stream = image.OpenReadStream())
+            await using (Stream stream = image.OpenReadStream())
                 stream.CopyTo(memoryStream);
 
             return Ok(await _mediator.Send(new VerifyAccessToLocationCommand(customerUid: customerUid, locationUid: locationUid, stream: memoryStream)));

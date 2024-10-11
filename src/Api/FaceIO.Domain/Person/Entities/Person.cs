@@ -12,6 +12,10 @@
 
         public string? FileName { get; internal set; }
 
+        public string? Email { get; internal set; }
+
+        public string? Phone { get; internal set; }
+
         public int CustomerFk { get; internal set; }
 
         [ForeignKey(nameof(CustomerFk))]
@@ -25,6 +29,30 @@
             }
 
             Name = name;
+
+            return this;
+        }
+
+        public Person SetEmail(string? email)
+        {
+            if (DeletedOn.HasValue)
+            {
+                throw new ValidationException("Can not set email, person is deleted.");
+            }
+
+            Email = email;
+
+            return this;
+        }
+
+        public Person SetPhone(string? phone)
+        {
+            if (DeletedOn.HasValue)
+            {
+                throw new ValidationException("Can not set phone, person is deleted.");
+            }
+
+            Phone = phone;
 
             return this;
         }
@@ -53,13 +81,19 @@
 
         public static class Factory
         {
-            public static Person Create(string name, int customerId)
+            public static Person Create(
+                string name,
+                string? email,
+                string? phone,
+                int customerId)
             {
                 return new Person
                 {
                     Uid = Guid.NewGuid(),
                     CreatedOn = DateTime.UtcNow,
                     Name = name,
+                    Email = email,
+                    Phone = phone,
                     CustomerFk = customerId
                 };
             }

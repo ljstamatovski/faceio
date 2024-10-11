@@ -6,6 +6,7 @@ import {
   IUpdatePersonRequest,
 } from "./contracts/interfaces";
 import { Observable } from "rxjs/internal/Observable";
+import { IGroupDto } from "../groups/contracts/interfaces";
 
 @Injectable({
   providedIn: "root",
@@ -32,12 +33,40 @@ export class PersonsService {
     );
   }
 
+  public getPersonGroups(
+    customerUid: string,
+    personUid: string
+  ): Observable<IGroupDto[]> {
+    return this._httpClient.get<IGroupDto[]>(
+      `${this.baseUrl}/api/customers/${customerUid}/persons/${personUid}/groups`
+    );
+  }
+
+  public getPersonFace(
+    customerUid: string,
+    personUid: string
+  ): Observable<string> {
+    return this._httpClient.get(
+      `${this.baseUrl}/api/customers/${customerUid}/persons/${personUid}/face`, {responseType: 'text'}
+    );
+  }
+
   public removePerson(
     customerUid: string,
     personUid: string
   ): Observable<void> {
     return this._httpClient.delete<void>(
       `${this.baseUrl}/api/customers/${customerUid}/persons/${personUid}`
+    );
+  }
+
+  public removePersonFromGroup(
+    customerUid: string,
+    groupUid: string,
+    personUid: string
+  ): Observable<void> {
+    return this._httpClient.delete<void>(
+      `${this.baseUrl}/api/customers/${customerUid}/groups/${groupUid}/persons/${personUid}`
     );
   }
 
@@ -59,6 +88,20 @@ export class PersonsService {
     return this._httpClient.patch<void>(
       `${this.baseUrl}/api/customers/${customerUid}/persons/${personUid}`,
       request
+    );
+  }
+
+  public uploadPersonFace(
+    customerUid: string,
+    personUid: string,
+    file: File
+  ): Observable<void> {
+    const formData: FormData = new FormData();
+    formData.append('image', file, file.name);
+
+    return this._httpClient.post<void>(
+      `${this.baseUrl}/api/customers/${customerUid}/persons/${personUid}/face`,
+      formData
     );
   }
 }

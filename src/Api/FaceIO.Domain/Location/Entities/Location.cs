@@ -13,7 +13,13 @@
 
         public string? Description { get; protected internal set; }
 
+        public string? Address { get; protected internal set; }
+
         public string CollectionId { get; protected internal set; } = string.Empty;
+
+        public decimal? Latitude { get; protected internal set; }
+
+        public decimal? Longitude { get; protected internal set; }
 
         public int CustomerFk { get; protected internal set; }
 
@@ -79,14 +85,7 @@
 
         public GroupAccessToLocation GetGroupAccessToLocation(Guid groupUid)
         {
-            GroupAccessToLocation? groupAccessToLocation = GroupsWithAccessToLocation.SingleOrDefault(x => x.Group.Uid == groupUid);
-
-            if (groupAccessToLocation is null)
-            {
-                throw new FaceIONotFoundException($"Group with uid {groupUid} not found.");
-            }
-
-            return groupAccessToLocation;
+            return GroupsWithAccessToLocation.SingleOrDefault(x => x.Group.Uid == groupUid) ?? throw new FaceIONotFoundException($"Group with uid {groupUid} not found.");
         }
 
         public static class Factory
