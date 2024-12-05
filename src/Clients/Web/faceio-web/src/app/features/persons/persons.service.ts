@@ -18,7 +18,7 @@ export class PersonsService {
     this.baseUrl = "https://localhost:5001";
   }
 
-  public getPersons(customerUid: string): Observable<IPersonDto[]> {
+  public getPeople(customerUid: string): Observable<IPersonDto[]> {
     return this._httpClient.get<IPersonDto[]>(
       `${this.baseUrl}/api/customers/${customerUid}/persons`
     );

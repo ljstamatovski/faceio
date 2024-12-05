@@ -1,20 +1,13 @@
-<h1 mat-dialog-title>Add location</h1>
-<form>
+<title mat-dialog-title>Add location</title>
+<mat-dialog-content>
   <mat-form-field>
     <input matInput placeholder="Name" [(ngModel)]="name" name="name" />
   </mat-form-field>
-  <br />
   <mat-form-field>
-    <textarea
-      matInput
-      placeholder="Description"
-      [(ngModel)]="description"
-      name="description"
-    ></textarea>
+    <input matInput placeholder="Description" [(ngModel)]="description" name="description" />
   </mat-form-field>
-  <br />
-  <div class="button-row">
-    <button mat-raised-button color="primary" (click)="onAdd()">Add</button>
-    <button mat-button color="warn" (click)="onCancel()">Cancel</button>
-  </div>
-</form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onCancel()">Cancel</button>
+  <button mat-button color="primary" (click)="onAdd()">Add</button>
+</mat-dialog-actions>

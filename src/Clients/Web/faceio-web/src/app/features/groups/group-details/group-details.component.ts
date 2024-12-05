@@ -13,6 +13,7 @@ import { IGroupDto, IUpdateGroupRequest } from "../contracts/interfaces";
 import { PersonsService } from "../../persons/persons.service";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 import { MatDialog } from "@angular/material/dialog";
+import { AddPersonComponent } from "../add-person/add-person.component";
 
 @Component({
   selector: "app-group-details",
@@ -91,6 +92,34 @@ export class GroupDetailsComponent implements OnInit {
             }
           );
       }
+    });
+  }
+
+  openAddPersonModal() {
+    const dialogRef = this.dialog.open(AddPersonComponent, {
+      width: "600px",
+      data: { groupUid: this.groupUid },
+    });
+
+    dialogRef.afterClosed().subscribe((personUid: string) => {
+      if (personUid) {
+        this.personsService
+          .addPersonInGroup(this.customerUid, this.groupUid, personUid)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.notificationService.openSnackBar(
+                "Person added in groupsuccessfully."
+              );
+              this.getPeopleInGroup();
+            },
+            () => {
+              this.notificationService.openSnackBar("Adding person failed.");
+            }
+          );
+      }
+
+      this.getPeopleInGroup();
     });
   }
 

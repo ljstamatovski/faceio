@@ -4,7 +4,6 @@ import { PersonsService } from "../persons.service";
 import { GroupsService } from "../../groups/groups.service";
 import { IGroupDto } from "../../groups/contracts/interfaces";
 import { take } from "rxjs";
-import { NotificationService } from "src/app/core/services/notification.service";
 
 @Component({
   selector: "app-assign-group",
@@ -12,6 +11,8 @@ import { NotificationService } from "src/app/core/services/notification.service"
   styleUrls: ["./assign-group.component.css"],
 })
 export class AssignGroupComponent implements OnInit {
+  public customerUid: string = "316f1c85-8e01-4749-845e-768b22219244";
+
   public personGroups: IGroupDto[];
   public availableGroups: IGroupDto[];
   public selectedGroupUid: string = "";
@@ -20,7 +21,6 @@ export class AssignGroupComponent implements OnInit {
     private dialogRef: MatDialogRef<AssignGroupComponent>,
     private personsService: PersonsService,
     private groupsService: GroupsService,
-    private notificationService: NotificationService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -35,7 +35,7 @@ export class AssignGroupComponent implements OnInit {
   ngOnInit(): void {
     this.personsService
       .getPersonGroups(
-        "316f1c85-8e01-4749-845e-768b22219244",
+        this.customerUid,
         this.data.personUid
       )
       .pipe(take(1))
@@ -43,7 +43,7 @@ export class AssignGroupComponent implements OnInit {
         if (result) {
           this.personGroups = result;
           this.groupsService
-            .getGroups("316f1c85-8e01-4749-845e-768b22219244")
+            .getGroups(this.customerUid)
             .pipe(take(1))
             .subscribe((groups: IGroupDto[]) => {
               if (groups) {

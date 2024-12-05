@@ -27,30 +27,33 @@
       />
     </div>
 
-    <mat-card class="info-card" fxFlex="50%">
-      <mat-card-content>
-        <form [formGroup]="personForm">
-          <mat-form-field appearance="outline" class="full-width">
+    <form [formGroup]="personForm" fxFlex="60%" fxFlex.sm="50%" fxFlex.xs="90%">
+      <mat-card>
+        <mat-card-title>Person</mat-card-title>
+        <mat-card-subtitle>Person information</mat-card-subtitle>
+        <mat-card-content>
+          <mat-form-field class="full-width">
             <mat-label>Name</mat-label>
             <input matInput type="text" formControlName="name" />
           </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field class="full-width">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" />
           </mat-form-field>
-          <mat-form-field appearance="outline" class="full-width">
+          <mat-form-field class="full-width">
             <mat-label>Phone</mat-label>
             <input matInput type="tel" formControlName="phone" />
           </mat-form-field>
-        </form>
-      </mat-card-content>
-    </mat-card>
+        </mat-card-content>
+      </mat-card>
+    </form>
   </div>
 
   <mat-card>
     <mat-card-content>
-      <h2>Groups</h2>
-      <mat-card-content
+      <mat-card-title>Groups</mat-card-title>
+      <mat-card-subtitle>List of groups that this person is part of</mat-card-subtitle>
+    <mat-card-content
         fxLayout="row"
         fxLayout.lt-md="column"
         fxLayoutAlign="space-between"

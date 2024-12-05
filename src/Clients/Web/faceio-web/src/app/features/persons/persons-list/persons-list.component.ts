@@ -111,7 +111,7 @@ export class PersonsListComponent implements OnInit {
 
   getPersons() {
     this.personsService
-      .getPersons(this.customerUid)
+      .getPeople(this.customerUid)
       .pipe(take(1))
       .subscribe((result: IPersonDto[]) => {
         if (result) {

@@ -5,6 +5,7 @@ import { GroupDetailsComponent } from './group-details/group-details.component';
 import { AddGroupComponent } from './add-group/add-group.component';
 import { GroupsRoutingModule } from './groups-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { AddPersonComponent } from './add-person/add-person.component';
 
 
 
@@ -12,7 +13,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
   declarations: [
     GroupsListComponent,
     GroupDetailsComponent,
-    AddGroupComponent
+    AddGroupComponent,
+    AddPersonComponent
   ],
   imports: [
     CommonModule,
