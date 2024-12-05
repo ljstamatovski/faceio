@@ -12,6 +12,9 @@ import { MatSort } from "@angular/material/sort";
 import { MatPaginator } from "@angular/material/paginator";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { IGroupDto } from "../../groups/contracts/interfaces";
+import { AssignGroupComponent } from "../assign-group/assign-group.component";
+import { MatDialog } from "@angular/material/dialog";
+import { filter } from "rxjs";
 
 @Component({
   selector: "app-person-details",
@@ -25,13 +28,12 @@ export class PersonDetailsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-
-  @ViewChild('fileInput') fileInput!: ElementRef;
+  @ViewChild("fileInput") fileInput!: ElementRef;
 
   public personUid: string;
-  public customerUid: string = '316f1c85-8e01-4749-845e-768b22219244';
+  public customerUid: string = "316f1c85-8e01-4749-845e-768b22219244";
 
-  public profileImageUrl: string = 'https://via.placeholder.com/150';
+  public profileImageUrl: string = "assets/images/user.png";
 
   public personForm: FormGroup;
 
@@ -40,7 +42,8 @@ export class PersonDetailsComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private personsService: PersonsService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialog: MatDialog
   ) {
     this.personForm = this._fb.group({
       name: ["", []],
@@ -68,15 +71,23 @@ export class PersonDetailsComponent implements OnInit {
 
   onRemoveClick(groupUid: string) {
     this.personsService
-      .removePersonFromGroup("316f1c85-8e01-4749-845e-768b22219244", groupUid, this.personUid)
+      .removePersonFromGroup(
+        "316f1c85-8e01-4749-845e-768b22219244",
+        groupUid,
+        this.personUid
+      )
       .pipe(take(1))
       .subscribe(
         () => {
           this.getPersonGroups();
-          this.notificationService.openSnackBar("Person removed from group successfuly.");
+          this.notificationService.openSnackBar(
+            "Person removed from group successfuly."
+          );
         },
         () => {
-          this.notificationService.openSnackBar("Person removing from group failed.");
+          this.notificationService.openSnackBar(
+            "Person removing from group failed."
+          );
         }
       );
   }
@@ -99,27 +110,27 @@ export class PersonDetailsComponent implements OnInit {
         .pipe(take(1))
         .subscribe({
           next: (response) => {
-            this.notificationService.openSnackBar('File uploaded successfully');
+            this.notificationService.openSnackBar("File uploaded successfully");
 
             this.personsService
               .getPersonFace(this.customerUid, this.personUid)
               .pipe(take(1))
               .subscribe((result: string) => {
-                if (result && result !== '') {
+                if (result && result !== "") {
                   this.profileImageUrl = result;
                 }
               });
           },
           error: (error) => {
-            this.notificationService.openSnackBar('Error uploading file');
-          }
+            this.notificationService.openSnackBar("Error uploading file");
+          },
         });
     }
   }
 
   getPersonGroups() {
     this.personsService
-      .getPersonGroups("316f1c85-8e01-4749-845e-768b22219244", this.personUid)
+      .getPersonGroups(this.customerUid, this.personUid)
       .pipe(take(1))
       .subscribe((result: IGroupDto[]) => {
         if (result) {
@@ -129,6 +140,34 @@ export class PersonDetailsComponent implements OnInit {
           this.notificationService.openSnackBar("Groups loaded");
         }
       });
+  }
+
+  openAssignGroupModal() {
+    const dialogRef = this.dialog.open(AssignGroupComponent, {
+      width: "600px",
+      data: { personUid: this.personUid },
+    });
+
+    dialogRef.afterClosed().subscribe((groupUid: string) => {
+      if (groupUid) {
+        this.personsService
+          .addPersonInGroup(this.customerUid, groupUid, this.personUid)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.notificationService.openSnackBar(
+                "Person assigned to group successfully."
+              );
+              this.getPersonGroups();
+            },
+            () => {
+              this.notificationService.openSnackBar("Adding person failed.");
+            }
+          );
+      }
+
+      this.getPersonGroups();
+    });
   }
 
   ngOnInit(): void {
@@ -162,7 +201,18 @@ export class PersonDetailsComponent implements OnInit {
       }
 
       this.personForm.valueChanges
-        .pipe(debounceTime(1000), distinctUntilChanged())
+        .pipe(
+          debounceTime(1000),
+          distinctUntilChanged(),
+          filter((value) => {
+            const currentValues = this.personForm.value;
+            return (
+              value.name !== currentValues.name ||
+              value.email !== currentValues.email ||
+              value.phone !== currentValues.phone
+            );
+          })
+        )
         .subscribe((value) => {
           let request: IUpdatePersonRequest = {
             name: this.personForm.get("name")?.value,
@@ -171,11 +221,7 @@ export class PersonDetailsComponent implements OnInit {
           };
 
           this.personsService
-            .updatePerson(
-              this.customerUid,
-              this.personUid,
-              request
-            )
+            .updatePerson(this.customerUid, this.personUid, request)
             .pipe(take(1))
             .subscribe(
               () => {

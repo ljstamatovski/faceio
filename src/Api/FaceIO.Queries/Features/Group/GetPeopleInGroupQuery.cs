@@ -6,6 +6,7 @@
     using Domain.Group.Entities;
     using Domain.Person.Entities;
     using Domain.PersonInGroup.Entities;
+    using FaceIO.Contracts.Person;
     using MediatR;
     using Microsoft.EntityFrameworkCore;
     using System;
@@ -13,29 +14,29 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class GetPersonsInGroupQuery : IRequest<IEnumerable<PersonInGroupDto>>
+    public class GetPeopleInGroupQuery : IRequest<IEnumerable<PersonDto>>
     {
         public Guid CustomerUid { get; }
 
         public Guid GroupUid { get; }
 
-        public GetPersonsInGroupQuery(Guid customerUid, Guid groupUid)
+        public GetPeopleInGroupQuery(Guid customerUid, Guid groupUid)
         {
             CustomerUid = customerUid;
             GroupUid = groupUid;
         }
     }
 
-    public class GetPersonsInGroupQueryHandler : IRequestHandler<GetPersonsInGroupQuery, IEnumerable<PersonInGroupDto>>
+    public class GetPeopleInGroupQueryHandler : IRequestHandler<GetPeopleInGroupQuery, IEnumerable<PersonDto>>
     {
         private readonly IFaceIODbContext _dbContext;
 
-        public GetPersonsInGroupQueryHandler(IFaceIODbContext playerService)
+        public GetPeopleInGroupQueryHandler(IFaceIODbContext playerService)
         {
             _dbContext = playerService;
         }
 
-        public async Task<IEnumerable<PersonInGroupDto>> Handle(GetPersonsInGroupQuery query, CancellationToken cancellationToken)
+        public async Task<IEnumerable<PersonDto>> Handle(GetPeopleInGroupQuery query, CancellationToken cancellationToken)
         {
             return await (from dbCustomer in _dbContext.Set<Customer>().Where(x => x.DeletedOn == null
                                                                                 && x.Uid == query.CustomerUid)
@@ -46,11 +47,13 @@
                           on dbGroup.Id equals dbPersonInGroup.GroupFk
                           join dbPerson in _dbContext.Set<Person>().Where(x => x.DeletedOn == null)
                           on dbPersonInGroup.PersonFk equals dbPerson.Id
-                          select new PersonInGroupDto
+                          select new PersonDto
                           {
-                              Id = dbPersonInGroup.Id,
-                              Uid = dbPersonInGroup.Uid,
-                              PersonName = dbPerson.Name,
+                              Id = dbPerson.Id,
+                              Uid = dbPerson.Uid,
+                              Name = dbPerson.Name,
+                              Email = dbPerson.Email,
+                              Phone = dbPerson.Phone,
                               CreatedOn = dbPersonInGroup.CreatedOn
                           }).ToArrayAsync(cancellationToken);
         }

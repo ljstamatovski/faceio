@@ -80,6 +80,17 @@ export class PersonsService {
     );
   }
 
+  public addPersonInGroup(
+    customerUid: string,
+    groupUid: string,
+    personUid: string
+  ): Observable<void> {
+    return this._httpClient.post<void>(
+      `${this.baseUrl}/api/customers/${customerUid}/groups/${groupUid}/persons/${personUid}`,
+      null    
+    );
+  }
+
   public updatePerson(
     customerUid: string,
     personUid: string,

@@ -1,26 +1,18 @@
-<h1>Add person</h1>
-<form>
+<h1 mat-dialog-title>Add person</h1>
+<mat-dialog-content>
   <mat-form-field>
     <input matInput placeholder="Name" [(ngModel)]="name" name="name" />
   </mat-form-field>
   <mat-form-field>
-    <input
-      matInput
-      placeholder="Email"
-      [(ngModel)]="email"
-      name="email"
-    /> </mat-form-field>
+    <input matInput placeholder="Email" [(ngModel)]="email" name="email" />
+  </mat-form-field>
   <mat-form-field>
-    <input
-      matInput
-      placeholder="Phone"
-      [(ngModel)]="phone"
-      name="phone"
-    /> </mat-form-field>
+    <input matInput placeholder="Phone" [(ngModel)]="phone" name="phone" />
+  </mat-form-field>
   <br />
   <br />
   <div class="button-row">
     <button mat-raised-button color="primary" (click)="onAdd()">Add</button>
     <button mat-button color="warn" (click)="onCancel()">Cancel</button>
   </div>
-</form>
+</mat-dialog-content>

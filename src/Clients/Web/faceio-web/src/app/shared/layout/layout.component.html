@@ -70,7 +70,7 @@
 
         <a mat-list-item [routerLink]="['/locations']" routerLinkActive="active">
           <mat-icon mat-list-icon>
-            business
+            place
           </mat-icon>
           <p mat-line> Locations </p>
         </a>
@@ -79,6 +79,13 @@
             people
           </mat-icon>
           <p mat-line> People </p>
+        </a>
+
+        <a mat-list-item [routerLink]="['/groups']" routerLinkActive="active">
+          <mat-icon mat-list-icon>
+            groups
+          </mat-icon>
+          <p mat-line> Groups </p>
         </a>
 
         <a mat-list-item [routerLink]="['/account/profile']">

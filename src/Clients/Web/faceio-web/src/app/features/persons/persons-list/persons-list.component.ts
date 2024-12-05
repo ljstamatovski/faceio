@@ -105,7 +105,7 @@ export class PersonsListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.titleService.setTitle("Persons");
+    this.titleService.setTitle("People");
     this.getPersons();
   }
 }

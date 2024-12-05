@@ -44,6 +44,11 @@
         public async Task<IActionResult> GetLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid)
             => Ok(await _mediator.Send(new GetLocationQuery(customerUid: customerUid, locationUid: locationUid)));
 
+        [HttpGet]
+        [Route("{locationUid:guid}/groups")]
+        public async Task<IActionResult> GetGroupsWithAccessToLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid)
+            => Ok(await _mediator.Send(new GetGroupsWithAccessToLocationQuery(customerUid: customerUid, locationUid: locationUid)));
+
         [HttpPatch]
         [Route("{locationUid:guid}")]
         public async Task<IActionResult> UpdateLocationAsync([FromRoute] Guid customerUid, [FromRoute] Guid locationUid, [FromBody] UpdateLocationRequest request)

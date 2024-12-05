@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Assign Group</h2>
+<mat-dialog-content>
+  <mat-form-field appearance="fill" class="full-width">
+    <mat-label>Group</mat-label>
+    <mat-select [(value)]="selectedGroupUid">
+      <mat-option *ngFor="let group of availableGroups" [value]="group.uid">
+        {{ group.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+  <button mat-button color="primary" (click)="onAssign()">Assign</button>
+</mat-dialog-actions>
