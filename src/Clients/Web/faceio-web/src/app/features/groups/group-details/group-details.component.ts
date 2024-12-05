@@ -1,4 +1,4 @@
-import { NotificationService } from 'src/app/core/services/notification.service';
+import { NotificationService } from "src/app/core/services/notification.service";
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
@@ -11,6 +11,8 @@ import { GroupsService } from "../groups.service";
 import { debounceTime, distinctUntilChanged, filter, take } from "rxjs";
 import { IGroupDto, IUpdateGroupRequest } from "../contracts/interfaces";
 import { PersonsService } from "../../persons/persons.service";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
   selector: "app-group-details",
@@ -35,7 +37,8 @@ export class GroupDetailsComponent implements OnInit {
     private groupsService: GroupsService,
     private personsService: PersonsService,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialog: MatDialog
   ) {
     this.groupForm = this._fb.group({
       name: ["", []],
@@ -61,26 +64,34 @@ export class GroupDetailsComponent implements OnInit {
   }
 
   onRemoveClick(personUid: string) {
-    this.personsService
-      .removePersonFromGroup(
-        this.customerUid,
-        this.groupUid,
-        personUid
-      )
-      .pipe(take(1))
-      .subscribe(
-        () => {
-          this.getPeopleInGroup();
-          this.notificationService.openSnackBar(
-            "Person removed from group successfuly."
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "600px",
+      data: {
+        title: "Remove person from group?",
+        message: "Are you sure you want to remove this person from the group?",
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.personsService
+          .removePersonFromGroup(this.customerUid, this.groupUid, personUid)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.getPeopleInGroup();
+              this.notificationService.openSnackBar(
+                "Person removed from group successfuly."
+              );
+            },
+            () => {
+              this.notificationService.openSnackBar(
+                "Person removing from group failed."
+              );
+            }
           );
-        },
-        () => {
-          this.notificationService.openSnackBar(
-            "Person removing from group failed."
-          );
-        }
-      );
+      }
+    });
   }
 
   getPeopleInGroup() {
@@ -118,10 +129,17 @@ export class GroupDetailsComponent implements OnInit {
       }
 
       this.groupForm.valueChanges
-        .pipe(debounceTime(1000), distinctUntilChanged(), filter((value) => {
-          const currentValues = this.groupForm.value;
-          return value.name !== currentValues.name || value.description !== currentValues.description;
-        }))
+        .pipe(
+          debounceTime(1000),
+          distinctUntilChanged(),
+          filter((value) => {
+            const currentValues = this.groupForm.value;
+            return (
+              value.name !== currentValues.name ||
+              value.description !== currentValues.description
+            );
+          })
+        )
         .subscribe((value) => {
           let request: IUpdateGroupRequest = {
             name: this.groupForm.get("name")?.value,

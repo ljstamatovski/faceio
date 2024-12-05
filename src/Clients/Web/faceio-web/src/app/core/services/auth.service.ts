@@ -1,11 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, map } from 'rxjs/operators';
-import * as jwt_decode from 'jwt-decode';
 import * as moment from 'moment';
 
-import { environment } from '../../../environments/environment';
-import { of, EMPTY } from 'rxjs';
+import { of } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -27,11 +25,11 @@ export class AuthenticationService {
                     this.localStorage.setItem('currentUser', JSON.stringify({
                         token: 'aisdnaksjdn,axmnczm',
                         isAdmin: true,
-                        email: 'john.doe@gmail.com',
-                        id: '12312323232',
-                        alias: 'john.doe@gmail.com'.split('@')[0],
+                        email: email,
+                        id: '1',
+                        alias: email.split('@')[0],
                         expiration: moment().add(1, 'days').toDate(),
-                        fullName: 'John Doe'
+                        fullName: email
                     }));
 
                     return true;
@@ -44,17 +42,25 @@ export class AuthenticationService {
     }
 
     getCurrentUser(): any {
+        let currentUser = this.localStorage.getItem('currentUser');
+
+        if(currentUser){
+            return JSON.parse(currentUser);
+        }
+
+        return null;
+
         // TODO: Enable after implementation
         // return JSON.parse(this.localStorage.getItem('currentUser'));
-        return {
-            token: 'aisdnaksjdn,axmnczm',
-            isAdmin: true,
-            email: 'john.doe@gmail.com',
-            id: '12312323232',
-            alias: 'john.doe@gmail.com'.split('@')[0],
-            expiration: moment().add(1, 'days').toDate(),
-            fullName: 'John Doe'
-        };
+        // return {
+        //     token: 'aisdnaksjdn,axmnczm',
+        //     isAdmin: true,
+        //     email: 'john.doe@gmail.com',
+        //     id: '12312323232',
+        //     alias: 'john.doe@gmail.com'.split('@')[0],
+        //     expiration: moment().add(1, 'days').toDate(),
+        //     fullName: 'John Doe'
+        // };
     }
 
     passwordResetRequest(email: string) {

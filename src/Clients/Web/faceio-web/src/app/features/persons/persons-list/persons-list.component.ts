@@ -1,4 +1,4 @@
-import { AddPersonComponent } from './../add-person/add-person.component';
+import { AddPersonComponent } from "./../add-person/add-person.component";
 import { PersonsService } from "./../persons.service";
 import { MatTableDataSource } from "@angular/material/table";
 import { ICreatePersonRequest, IPersonDto } from "./../contracts/interfaces";
@@ -12,6 +12,7 @@ import { MatSort } from "@angular/material/sort";
 import { Router } from "@angular/router";
 import { MatDialog } from "@angular/material/dialog";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-persons-list",
@@ -19,6 +20,8 @@ import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
   styleUrls: ["./persons-list.component.css"],
 })
 export class PersonsListComponent implements OnInit {
+  public customerUid: string = "316f1c85-8e01-4749-845e-768b22219244";
+
   columns: string[] = ["name", "createdOn", "actions"];
   dataSource = new MatTableDataSource<IPersonDto>();
 
@@ -54,15 +57,17 @@ export class PersonsListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: ICreatePersonRequest) => {
       if (result) {
         this.personsService
-          .addPerson("316f1c85-8e01-4749-845e-768b22219244", result)
+          .addPerson(this.customerUid, result)
           .pipe(take(1))
           .subscribe(
             () => {
-              this.notificationService.openSnackBar('Person added successfully.');
+              this.notificationService.openSnackBar(
+                "Person added successfully."
+              );
               this.getPersons();
             },
             () => {
-              this.notificationService.openSnackBar('Adding person failed.');
+              this.notificationService.openSnackBar("Adding person failed.");
             }
           );
       }
@@ -72,18 +77,32 @@ export class PersonsListComponent implements OnInit {
   }
 
   onRemoveClick(personUid: string) {
-    this.personsService
-      .removePerson("316f1c85-8e01-4749-845e-768b22219244", personUid)
-      .pipe(take(1))
-      .subscribe(
-        () => {
-          this.getPersons();
-          this.notificationService.openSnackBar("Person removed successfuly");
-        },
-        () => {
-          this.notificationService.openSnackBar("Person remove failed");
-        }
-      );
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "600px",
+      data: {
+        title: "Delete person?",
+        message: "Are you sure you want to delete this person?",
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.personsService
+          .removePerson(this.customerUid, personUid)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.getPersons();
+              this.notificationService.openSnackBar(
+                "Person removed successfuly."
+              );
+            },
+            () => {
+              this.notificationService.openSnackBar("Person removing failed.");
+            }
+          );
+      }
+    });
   }
 
   navigateToDetails(uid: string) {
@@ -92,7 +111,7 @@ export class PersonsListComponent implements OnInit {
 
   getPersons() {
     this.personsService
-      .getPersons("316f1c85-8e01-4749-845e-768b22219244")
+      .getPersons(this.customerUid)
       .pipe(take(1))
       .subscribe((result: IPersonDto[]) => {
         if (result) {

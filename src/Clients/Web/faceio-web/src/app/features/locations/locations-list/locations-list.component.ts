@@ -11,6 +11,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatSort } from "@angular/material/sort";
 import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { Router } from "@angular/router";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-locations-list",
@@ -18,6 +19,8 @@ import { Router } from "@angular/router";
   styleUrls: ["./locations-list.component.css"],
 })
 export class LocationsListComponent implements OnInit {
+  public customerUid: string = "316f1c85-8e01-4749-845e-768b22219244";
+
   columns: string[] = ["name", "createdOn", "description", "actions"];
   dataSource = new MatTableDataSource<ILocationDto>();
 
@@ -57,11 +60,13 @@ export class LocationsListComponent implements OnInit {
           .pipe(take(1))
           .subscribe(
             () => {
-              this.notificationService.openSnackBar('Location added successfully.');
+              this.notificationService.openSnackBar(
+                "Location added successfully."
+              );
               this.getLocations();
             },
             () => {
-              this.notificationService.openSnackBar('Adding location failed.');
+              this.notificationService.openSnackBar("Adding location failed.");
             }
           );
       }
@@ -71,18 +76,32 @@ export class LocationsListComponent implements OnInit {
   }
 
   onRemoveClick(locationUid: string) {
-    this.locationsService
-      .removeLocation("316f1c85-8e01-4749-845e-768b22219244", locationUid)
-      .pipe(take(1))
-      .subscribe(
-        () => {
-          this.getLocations();
-          this.notificationService.openSnackBar("Location removed successfuly");
-        },
-        () => {
-          this.notificationService.openSnackBar("Location remove failed");
-        }
-      );
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "600px",
+      data: {
+        title: "Delete location?",
+        message: "Are you sure you want to delete this location?",
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.locationsService
+          .removeLocation(this.customerUid, locationUid)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.getLocations();
+              this.notificationService.openSnackBar(
+                "Location removed successfuly"
+              );
+            },
+            () => {
+              this.notificationService.openSnackBar("Location remove failed");
+            }
+          );
+      }
+    });
   }
 
   navigateToDetails(uid: string) {
@@ -91,7 +110,7 @@ export class LocationsListComponent implements OnInit {
 
   getLocations() {
     this.locationsService
-      .getLocations("316f1c85-8e01-4749-845e-768b22219244")
+      .getLocations(this.customerUid)
       .pipe(take(1))
       .subscribe((result: ILocationDto[]) => {
         if (result) {

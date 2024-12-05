@@ -15,6 +15,7 @@ import { IGroupDto } from "../../groups/contracts/interfaces";
 import { AssignGroupComponent } from "../assign-group/assign-group.component";
 import { MatDialog } from "@angular/material/dialog";
 import { filter } from "rxjs";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-person-details",
@@ -70,26 +71,34 @@ export class PersonDetailsComponent implements OnInit {
   }
 
   onRemoveClick(groupUid: string) {
-    this.personsService
-      .removePersonFromGroup(
-        "316f1c85-8e01-4749-845e-768b22219244",
-        groupUid,
-        this.personUid
-      )
-      .pipe(take(1))
-      .subscribe(
-        () => {
-          this.getPersonGroups();
-          this.notificationService.openSnackBar(
-            "Person removed from group successfuly."
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "600px",
+      data: {
+        title: "Remove person from group?",
+        message: "Are you sure you want to remove this person from the group?",
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.personsService
+          .removePersonFromGroup(this.customerUid, groupUid, this.personUid)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.getPersonGroups();
+              this.notificationService.openSnackBar(
+                "Person removed from group successfuly."
+              );
+            },
+            () => {
+              this.notificationService.openSnackBar(
+                "Person removing from group failed."
+              );
+            }
           );
-        },
-        () => {
-          this.notificationService.openSnackBar(
-            "Person removing from group failed."
-          );
-        }
-      );
+      }
+    });
   }
 
   triggerFileUpload() {

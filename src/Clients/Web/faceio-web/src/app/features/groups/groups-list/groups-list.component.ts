@@ -1,23 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ICreateGroupRequest, IGroupDto } from '../contracts/interfaces';
-import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { GroupsService } from '../groups.service';
-import { Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { NotificationService } from 'src/app/core/services/notification.service';
-import { Title } from '@angular/platform-browser';
-import { take } from 'rxjs';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { AddGroupComponent } from '../add-group/add-group.component';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { ICreateGroupRequest, IGroupDto } from "../contracts/interfaces";
+import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+import { GroupsService } from "../groups.service";
+import { Router } from "@angular/router";
+import { MatDialog } from "@angular/material/dialog";
+import { NotificationService } from "src/app/core/services/notification.service";
+import { Title } from "@angular/platform-browser";
+import { take } from "rxjs";
+import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { AddGroupComponent } from "../add-group/add-group.component";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
-  selector: 'app-groups-list',
-  templateUrl: './groups-list.component.html',
-  styleUrls: ['./groups-list.component.css']
+  selector: "app-groups-list",
+  templateUrl: "./groups-list.component.html",
+  styleUrls: ["./groups-list.component.css"],
 })
 export class GroupsListComponent implements OnInit {
+  public customerUid: string = "316f1c85-8e01-4749-845e-768b22219244";
 
   columns: string[] = ["name", "createdOn", "description", "actions"];
   dataSource = new MatTableDataSource<IGroupDto>();
@@ -54,15 +56,17 @@ export class GroupsListComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result: ICreateGroupRequest) => {
       if (result) {
         this.groupsService
-          .addGroup("316f1c85-8e01-4749-845e-768b22219244", result)
+          .addGroup(this.customerUid, result)
           .pipe(take(1))
           .subscribe(
             () => {
-              this.notificationService.openSnackBar('Location added successfully.');
+              this.notificationService.openSnackBar(
+                "Group added successfully."
+              );
               this.getGroups();
             },
             () => {
-              this.notificationService.openSnackBar('Adding location failed.');
+              this.notificationService.openSnackBar("Adding group failed.");
             }
           );
       }
@@ -72,18 +76,32 @@ export class GroupsListComponent implements OnInit {
   }
 
   onRemoveClick(groupUid: string) {
-    this.groupsService
-      .removeGroup("316f1c85-8e01-4749-845e-768b22219244", groupUid)
-      .pipe(take(1))
-      .subscribe(
-        () => {
-          this.getGroups();
-          this.notificationService.openSnackBar("Group removed successfuly");
-        },
-        () => {
-          this.notificationService.openSnackBar("Group remove failed");
-        }
-      );
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "600px",
+      data: {
+        title: "Delete group?",
+        message: "Are you sure you want to delete this group?",
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.groupsService
+          .removeGroup(this.customerUid, groupUid)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.getGroups();
+              this.notificationService.openSnackBar(
+                "Group removed successfuly"
+              );
+            },
+            () => {
+              this.notificationService.openSnackBar("Group remove failed");
+            }
+          );
+      }
+    });
   }
 
   navigateToDetails(uid: string) {
@@ -92,7 +110,7 @@ export class GroupsListComponent implements OnInit {
 
   getGroups() {
     this.groupsService
-      .getGroups("316f1c85-8e01-4749-845e-768b22219244")
+      .getGroups(this.customerUid)
       .pipe(take(1))
       .subscribe((result: IGroupDto[]) => {
         if (result) {

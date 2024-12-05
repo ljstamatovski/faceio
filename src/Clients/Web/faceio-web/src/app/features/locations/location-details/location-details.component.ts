@@ -15,6 +15,7 @@ import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { AssignGroupComponent } from "../assign-group/assign-group.component";
 import { MatDialog } from "@angular/material/dialog";
 import { filter } from "rxjs";
+import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: "app-location-details",
@@ -64,26 +65,34 @@ export class LocationDetailsComponent implements OnInit {
   }
 
   onRemoveClick(groupUid: string) {
-    this.locationsService
-      .removeGroupFromLocation(
-        this.customerUid,
-        this.locationUid,
-        groupUid
-      )
-      .pipe(take(1))
-      .subscribe(
-        () => {
-          this.getGroupsWithAccessToLocation();
-          this.notificationService.openSnackBar(
-            "Group removed from location successfuly."
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: "600px",
+      data: {
+        title: "Remove group from location?",
+        message: "Are you sure you want to remove this group from the location?",
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.locationsService
+          .removeGroupFromLocation(this.customerUid, this.locationUid, groupUid)
+          .pipe(take(1))
+          .subscribe(
+            () => {
+              this.getGroupsWithAccessToLocation();
+              this.notificationService.openSnackBar(
+                "Group removed from location successfuly."
+              );
+            },
+            () => {
+              this.notificationService.openSnackBar(
+                "Group removing from location failed."
+              );
+            }
           );
-        },
-        () => {
-          this.notificationService.openSnackBar(
-            "Group removing from location failed."
-          );
-        }
-      );
+      }
+    });
   }
 
   getGroupsWithAccessToLocation() {
@@ -109,11 +118,7 @@ export class LocationDetailsComponent implements OnInit {
     dialogRef.afterClosed().subscribe((groupUid: string) => {
       if (groupUid) {
         this.locationsService
-          .addGroupToLocation(
-            this.customerUid,
-            this.locationUid,
-            groupUid
-          )
+          .addGroupToLocation(this.customerUid, this.locationUid, groupUid)
           .pipe(take(1))
           .subscribe(
             () => {
@@ -149,14 +154,21 @@ export class LocationDetailsComponent implements OnInit {
             }
           });
 
-          this.getGroupsWithAccessToLocation();
+        this.getGroupsWithAccessToLocation();
       }
 
       this.locationForm.valueChanges
-        .pipe(debounceTime(1000), distinctUntilChanged(), filter((value) => {
-          const currentValues = this.locationForm.value;
-          return value.name !== currentValues.name || value.description !== currentValues.description;
-        }))
+        .pipe(
+          debounceTime(1000),
+          distinctUntilChanged(),
+          filter((value) => {
+            const currentValues = this.locationForm.value;
+            return (
+              value.name !== currentValues.name ||
+              value.description !== currentValues.description
+            );
+          })
+        )
         .subscribe((value) => {
           let request: IUpdateLocationRequest = {
             name: this.locationForm.get("name")?.value,
@@ -164,11 +176,7 @@ export class LocationDetailsComponent implements OnInit {
           };
 
           this.locationsService
-            .updateLocation(
-              this.customerUid,
-              this.locationUid,
-              request
-            )
+            .updateLocation(this.customerUid, this.locationUid, request)
             .pipe(take(1))
             .subscribe(
               () => {
