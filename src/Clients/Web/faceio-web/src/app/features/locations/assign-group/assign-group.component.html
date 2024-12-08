@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Assign Group</h2>
 <mat-dialog-content>
   <mat-form-field appearance="fill" class="full-width">
-    <mat-label>Group</mat-label>
+    <mat-label>Please select a group..</mat-label>
     <mat-select [(value)]="selectedGroupUid">
       <mat-option *ngFor="let group of availableGroups" [value]="group.uid">
         {{ group.name }}

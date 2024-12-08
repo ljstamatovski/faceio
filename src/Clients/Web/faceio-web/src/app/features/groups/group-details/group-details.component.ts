@@ -160,15 +160,7 @@ export class GroupDetailsComponent implements OnInit {
       this.groupForm.valueChanges
         .pipe(
           debounceTime(1000),
-          distinctUntilChanged(),
-          filter((value) => {
-            const currentValues = this.groupForm.value;
-            return (
-              value.name !== currentValues.name ||
-              value.description !== currentValues.description
-            );
-          })
-        )
+          distinctUntilChanged())
         .subscribe((value) => {
           let request: IUpdateGroupRequest = {
             name: this.groupForm.get("name")?.value,

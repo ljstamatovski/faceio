@@ -160,15 +160,7 @@ export class LocationDetailsComponent implements OnInit {
       this.locationForm.valueChanges
         .pipe(
           debounceTime(1000),
-          distinctUntilChanged(),
-          filter((value) => {
-            const currentValues = this.locationForm.value;
-            return (
-              value.name !== currentValues.name ||
-              value.description !== currentValues.description
-            );
-          })
-        )
+          distinctUntilChanged())
         .subscribe((value) => {
           let request: IUpdateLocationRequest = {
             name: this.locationForm.get("name")?.value,

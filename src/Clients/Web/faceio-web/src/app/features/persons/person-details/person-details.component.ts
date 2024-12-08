@@ -14,7 +14,6 @@ import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { IGroupDto } from "../../groups/contracts/interfaces";
 import { AssignGroupComponent } from "../assign-group/assign-group.component";
 import { MatDialog } from "@angular/material/dialog";
-import { filter } from "rxjs";
 import { ConfirmDialogComponent } from "src/app/shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
@@ -212,15 +211,7 @@ export class PersonDetailsComponent implements OnInit {
       this.personForm.valueChanges
         .pipe(
           debounceTime(1000),
-          distinctUntilChanged(),
-          filter((value) => {
-            const currentValues = this.personForm.value;
-            return (
-              value.name !== currentValues.name ||
-              value.email !== currentValues.email ||
-              value.phone !== currentValues.phone
-            );
-          })
+          distinctUntilChanged()
         )
         .subscribe((value) => {
           let request: IUpdatePersonRequest = {
