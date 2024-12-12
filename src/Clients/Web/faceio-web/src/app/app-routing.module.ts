@@ -44,12 +44,6 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard],
   },
   {
-    path: "about",
-    loadChildren: () =>
-      import("./features/about/about.module").then((m) => m.AboutModule),
-    canActivate: [AuthGuard],
-  },
-  {
     path: "**",
     redirectTo: "dashboard",
     pathMatch: "full",
